@@ -1,0 +1,3 @@
+[submodule "LibRobotControl"]
+	path = LibRobotControl
+	url = git@github.com:Birkehoj/librobotcontrol.git
