@@ -4,6 +4,7 @@ project("BeagleBoneIO" LANGUAGES C CXX)
 
 list(APPEND _sources
 	src/LEDControl.cpp
+	src/OnBoardButtons.cpp
 )
 
 add_library("BeagleBoneIO"

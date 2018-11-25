@@ -6,11 +6,6 @@ fi
 
 cd build
 
-# Hack to target arm
-#export CC=/usr/bin/arm-linux-gnueabi-gcc-8
-#export CXX=/usr/bin/arm-linux-gnueabi-g++-8
-# end of hack
-cmake .. -DCMAKE_TOOLCHAIN_FILE=arm-toolchain.cmake
+cmake .. -DCMAKE_TOOLCHAIN_FILE=arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
 cpucount=`nproc`
-
-make -j${cpucount}
+cmake --build . -- -j${cpucount}

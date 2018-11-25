@@ -1,25 +1,49 @@
 #include<cstdlib>
 #include <iostream>
 #include <atomic>
+#include <thread>
+#include <chrono>
 #include "BeagleBoneIO/LEDControl.h"
 
+namespace Ch = std::chrono;
+
 #include <signal.h> //  our new library
-volatile std::atomic_bool continueRunning = true;
-static void my_function(int /*sig*/){ // can be called asynchronously
+static volatile std::atomic_bool continueRunning = true;
+static void my_function(int /*sig*/)
+{
   continueRunning = false; // set flag
 }
 
 int main()
 {
-    // Register signals
-    signal(SIGINT, my_function);
-    std::cout << "Two wheeled robot operational" << std::endl;
-    std::cout << "Testing LED's" << std::endl;
-    BeagleBoneIO::LEDControl::LED greenLED(BeagleBoneIO::LEDControl::LEDType::GREEN);
-    BeagleBoneIO::LEDControl::LED redLED(BeagleBoneIO::LEDControl::LEDType::RED);
-    greenLED.EnablePeriodicBlick();
-    while(continueRunning)
-    {
-    }
-    return EXIT_SUCCESS;
+
+	// Register signals
+	signal(SIGINT, my_function);
+	std::cout << "Two wheeled robot operational" << std::endl;
+	std::cout << "Testing LED's" << std::endl;
+	using namespace BeagleBoneIO::LEDControl;
+	LED<LEDType::GREEN> greenLED;
+	LED<LEDType::RED> redLED;
+	redLED.EnablePeriodicBlick();
+	greenLED.TurnOn(true, UINT8_MAX);
+	unsigned count = 0;
+	bool lightInLed = false;
+	Ch::time_point now = Ch::steady_clock::now();
+	while(continueRunning)
+	{
+		using namespace std::chrono_literals;
+		Ch::time_point nextAwakeTime = Ch::steady_clock::now() + 10ms;
+		if(++count > 100)
+		{
+			lightInLed = !lightInLed;
+			greenLED.TurnOn(lightInLed, 100);
+			count = 0;
+			auto duration = Ch::duration_cast<Ch::milliseconds>(Ch::steady_clock::now() - now);
+			now = Ch::steady_clock::now();
+			std::cout << "Time elabsed " << duration.count() << std::endl;
+		}
+		std::this_thread::sleep_until(nextAwakeTime);
+	}
+	std::cout << "Shutting down" << std::endl;
+	return EXIT_SUCCESS;
 }
