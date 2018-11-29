@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 
 project("BeagleBoneIO" LANGUAGES C CXX)
 
@@ -7,6 +7,8 @@ list(APPEND _sources
 	src/OnBoardButtons.cpp
 )
 
+add_library(CompilerSetup INTERFACE)
+
 add_library("BeagleBoneIO"
 	STATIC
 		${_sources}
@@ -14,6 +16,11 @@ add_library("BeagleBoneIO"
 
 target_compile_features("BeagleBoneIO"
 	PUBLIC cxx_std_17
+)
+
+target_compile_options("BeagleBoneIO"
+	PUBLIC
+	${CXX_FLAGS}
 )
 
 set_target_properties("BeagleBoneIO"

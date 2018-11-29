@@ -1,9 +1,16 @@
-#pragma once
+#ifndef BEAGLE_BONE_IO_FOOBAR_H
+#define BEAGLE_BONE_IO_FOOBAR_H
 
 #include <cstdint>
 
-namespace BeagleBoneIO::LEDControl
+namespace BeagleBoneIO
 {
+namespace Details
+{
+void SetTrigger(char const* filePath, char const* triggerType) noexcept;
+void SetBrightness(char const* filePath, uint8_t brightness) noexcept;
+}
+
 enum class LEDType : uint8_t
 {
 	GREEN,
@@ -14,28 +21,25 @@ enum class LEDType : uint8_t
 	BAT100,
 };
 
-void SetTrigger(char const* filePath, char const* triggerType);
-void SetBrightness(char const* filePath, uint8_t brightness);
-
 template <LEDType ledType>
 class LED
 {
 public:
-	LED()
+	LED() noexcept
 	{
 		EnableHeartBeat();
 	}
-	~LED()
+	~LED() noexcept
 	{
 		TurnOn(false);
 	}
 
-	inline void EnablePeriodicBlick()
+	inline void EnablePeriodicBlick() noexcept
 	{
 		SetTriggerType("timer");
 	}
 
-	inline void EnableHeartBeat()
+	inline void EnableHeartBeat() noexcept
 	{
 		SetTriggerType("heartbeat");
 	}
@@ -45,7 +49,7 @@ public:
 #define RED_TYPE LED_PATH "red/"
 #define BRIGHTNESS_PATH "brightness"
 
-	inline void TurnOn(bool on, uint8_t brightness=10)
+	inline void TurnOn(bool on, uint8_t brightness=10) noexcept
 	{
 		if(!on)
 			brightness = 0;
@@ -54,11 +58,11 @@ public:
 
 		if constexpr(ledType == LEDType::GREEN)
 		{
-			SetBrightness(GREEN_TYPE BRIGHTNESS_PATH, brightness);
+			Details::SetBrightness(GREEN_TYPE BRIGHTNESS_PATH, brightness);
 		}
 		else if(ledType == LEDType::RED)
 		{
-			SetBrightness(RED_TYPE BRIGHTNESS_PATH, brightness);
+			Details::SetBrightness(RED_TYPE BRIGHTNESS_PATH, brightness);
 		}
 		// possible other types one could support
 //		switch (type_)
@@ -79,15 +83,15 @@ public:
 	}
 private:
 #define TRIGGER_PATH "trigger"
-	inline void SetTriggerType(char const* triggerType)
+	inline void SetTriggerType(char const* triggerType) noexcept
 	{
 		if constexpr(ledType == LEDType::GREEN)
 		{
-			SetTrigger(GREEN_TYPE TRIGGER_PATH, triggerType);
+			Details::SetTrigger(GREEN_TYPE TRIGGER_PATH, triggerType);
 		}
 		else if(ledType == LEDType::RED)
 		{
-			SetTrigger(RED_TYPE TRIGGER_PATH, triggerType);
+			Details::SetTrigger(RED_TYPE TRIGGER_PATH, triggerType);
 		}
 	}
 #undef TRIGGER_PATH
@@ -96,7 +100,6 @@ private:
 #undef RED_TYPE
 #undef LED_PATH
 };
+} // namespace BeagleBoneIO
 
-
-
-}
+#endif // BEAGLE_BONE_IO_FOOBAR_H

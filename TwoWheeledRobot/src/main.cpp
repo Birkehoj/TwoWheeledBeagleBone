@@ -3,25 +3,26 @@
 #include <atomic>
 #include <thread>
 #include <chrono>
+#include <csignal>
 #include "BeagleBoneIO/LEDControl.h"
 
 namespace Ch = std::chrono;
 
-#include <signal.h> //  our new library
 static volatile std::atomic_bool continueRunning = true;
-static void my_function(int /*sig*/)
+
+static void my_function(int /*sig*/) // NOLINT(readability/casting)
 {
-  continueRunning = false; // set flag
+	continueRunning = false; // set flag
 }
 
 int main()
 {
-
 	// Register signals
 	signal(SIGINT, my_function);
 	std::cout << "Two wheeled robot operational" << std::endl;
 	std::cout << "Testing LED's" << std::endl;
-	using namespace BeagleBoneIO::LEDControl;
+	using BeagleBoneIO::LEDType;
+	using BeagleBoneIO::LED;
 	LED<LEDType::GREEN> greenLED;
 	LED<LEDType::RED> redLED;
 	redLED.EnablePeriodicBlick();
@@ -31,7 +32,7 @@ int main()
 	Ch::time_point now = Ch::steady_clock::now();
 	while(continueRunning)
 	{
-		using namespace std::chrono_literals;
+		using namespace std::chrono_literals; // NOLINT(build/namespaces)
 		Ch::time_point nextAwakeTime = Ch::steady_clock::now() + 10ms;
 		if(++count > 100)
 		{
