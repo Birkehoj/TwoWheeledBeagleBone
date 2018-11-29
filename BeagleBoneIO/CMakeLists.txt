@@ -7,8 +7,6 @@ list(APPEND _sources
 	src/OnBoardButtons.cpp
 )
 
-add_library(CompilerSetup INTERFACE)
-
 add_library("BeagleBoneIO"
 	STATIC
 		${_sources}
@@ -39,4 +37,5 @@ target_include_directories("BeagleBoneIO"
 target_link_libraries("BeagleBoneIO"
 	PRIVATE
 		robotics_cape
+		CompilerSetup
 )
