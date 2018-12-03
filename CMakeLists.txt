@@ -3,10 +3,7 @@ cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 project("TwoWheeledBeagleBone" LANGUAGES C CXX)
 
 include(cppcheck.cmake)
-
-set(CMAKE_CXX_CPPLINT cpplint)
-
-#set(CMAKE_CXX_CLANG_TIDY clang-tidy checks=-*,readability-*)
+include(cpplint.cmake)
 
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
