@@ -19,11 +19,11 @@ class MotorChannel {
   MotorChannel(MotorChannel&& other) = default;
   MotorChannel& operator=(MotorChannel&& other) = default;
   // cppcheck-suppress functionStatic
-  void Set(ChannelNumber ch, double duty);  // cppcheck-suppress
+  void set(ChannelNumber ch, double duty);
   // cppcheck-suppress functionStatic
-  void BreakMotor(ChannelNumber ch);
+  void breakMotor(ChannelNumber ch);
   // cppcheck-suppress functionStatic
-  void EnableFreeSpin(ChannelNumber ch);
+  void enableFreeSpin(ChannelNumber ch);
 };
 }  // namespace BeagleBoneIO
 

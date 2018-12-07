@@ -5,7 +5,6 @@
 namespace BeagleBoneIO {
 namespace Details {
 void SetTrigger(char const* filePath, char const* triggerType) noexcept {
-  // cppcheck-suppress syntaxError; lack of c++17 support in 1.85
   if (std::ofstream fs(filePath); fs.good()) {
     fs << triggerType;
   }

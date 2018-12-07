@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 
 project("CompilerSetup")
 
-add_library("CompilerSetup" INTERFACE)
+add_library(${PROJECT_NAME} INTERFACE)
 
-target_compile_options("CompilerSetup"
+target_compile_options(${PROJECT_NAME}
   INTERFACE
   -Wall
   -Wextra # reasonable and standard
@@ -31,6 +31,15 @@ target_compile_options("CompilerSetup"
   -Wuseless-cast # warn if you perform a cast to the same type
   -Wdouble-promotion # warn if float is implicit promoted to double
   -Wformat=2 # warn on security issues around functions that format output
+  -Wpadded
+  -Wduplicated-cond
+  -Wduplicated-branches
+  -Wlogical-op
+  -Wnull-dereference
+  -Wold-style-cast
+  -Wuseless-cast
+  -Wshadow
+  -Wformat=2
   # (ie printf)
   #						-Wno-c++98-compat
   #						-Wno-c++98-compat-pedantic

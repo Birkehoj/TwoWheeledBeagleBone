@@ -6,16 +6,16 @@ list(APPEND _sources
 	src/WheelController.cpp
 )
 
-add_library("WheelController"
+add_library(${PROJECT_NAME}
 	STATIC
 		${_sources}
 )
 
-target_compile_features("WheelController"
+target_compile_features(${PROJECT_NAME}
 	PUBLIC cxx_std_17
 )
 
-set_target_properties("WheelController"
+set_target_properties(${PROJECT_NAME}
 	PROPERTIES
 	CXX_STANARD 17
 	CXX_EXTENSIONS OFF
@@ -23,12 +23,12 @@ set_target_properties("WheelController"
 	POSITION_INDEPENDENT_CODE ON
 )
 
-target_include_directories("WheelController"
+target_include_directories(${PROJECT_NAME}
 	PUBLIC
 		./include
 )
 
-target_link_libraries("WheelController"
+target_link_libraries(${PROJECT_NAME}
 	PRIVATE
 		BeagleBoneIO
 )

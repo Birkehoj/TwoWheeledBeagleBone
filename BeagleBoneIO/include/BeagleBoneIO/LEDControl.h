@@ -12,33 +12,35 @@ void SetBrightness(char const* filePath, uint8_t brightness) noexcept;
 enum class LEDType : uint8_t {
   GREEN,
   RED,
-  BAT25,
-  BAT50,
-  BAT75,
-  BAT100,
+  //  BAT25,
+  //  BAT50,
+  //  BAT75,
+  //  BAT100,
 };
 
 template <LEDType ledType>
 class LED {
  public:
-  LED() noexcept { EnableHeartBeat(); }
-  ~LED() noexcept { TurnOn(false); }
+  LED() noexcept { enableHeartBeat(); }
+  ~LED() noexcept { turnOff(); }
+  LED(const LED&) = default;
+  LED& operator=(const LED&) = default;
+  LED(LED&&) noexcept = default;
+  LED& operator=(LED&&) noexcept = default;
 
-  inline void EnablePeriodicBlick() noexcept { SetTriggerType("timer"); }
+  inline void enablePeriodicBlick() noexcept { setTriggerType("timer"); }
 
-  inline void EnableHeartBeat() noexcept { SetTriggerType("heartbeat"); }
+  inline void enableHeartBeat() noexcept { setTriggerType("heartbeat"); }
 
 #define LED_PATH "/sys/devices/platform/leds/leds/"
 #define GREEN_TYPE LED_PATH "green/"
 #define RED_TYPE LED_PATH "red/"
 #define BRIGHTNESS_PATH "brightness"
 
-  inline void TurnOn(bool on, uint8_t brightness = 10) noexcept {
-    if (!on) {
-      brightness = 0;
-    }
+  inline void turnOff() noexcept { turnOn(0); }
 
-    SetTriggerType("none");
+  inline void turnOn(uint8_t brightness = 10) noexcept {
+    setTriggerType("none");
 
     if constexpr (ledType == LEDType::GREEN) {
       Details::SetBrightness(GREEN_TYPE BRIGHTNESS_PATH, brightness);
@@ -65,7 +67,7 @@ class LED {
 
  private:
 #define TRIGGER_PATH "trigger"
-  inline void SetTriggerType(char const* triggerType) noexcept {
+  inline void setTriggerType(char const* triggerType) noexcept {
     if constexpr (ledType == LEDType::GREEN) {
       Details::SetTrigger(GREEN_TYPE TRIGGER_PATH, triggerType);
     } else if (ledType == LEDType::RED) {

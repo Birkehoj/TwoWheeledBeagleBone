@@ -16,13 +16,13 @@ add_custom_target(
   --verbose
   --suppress=missingIncludeSystem
   -I${CMAKE_SOURCE_DIR}/BeagleBoneIO/include
-  --template='{file}:{line},{severity},{id},{message}'
+#  --template='{file}:{line},{severity},{id},{message}'
   --suppress=syntaxError # c++17 features not supported
   -i${CMAKE_SOURCE_DIR}/LibRobotControl/*
   -i${CMAKE_SOURCE_DIR}/LibRobotControl/include/*
-  -j5
+#  -j5
   --xml
-
   -I${CMAKE_SOURCE_DIR}/LibRobotControl/library/include
   -DMAVLINK_EXTERNAL_RX_BUFFER
+#  --check-config
 )

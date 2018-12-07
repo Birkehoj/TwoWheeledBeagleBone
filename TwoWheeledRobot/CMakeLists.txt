@@ -6,9 +6,11 @@ list(APPEND _sources
   src/main.cpp
   )
 
-add_executable("TwoWheeledRobot" ${_sources})
+add_executable(${PROJECT_NAME} ${_sources})
 
-set_target_properties("TwoWheeledRobot"
+#set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+
+set_target_properties(${PROJECT_NAME}
   PROPERTIES
   CXX_STANARD 17
   CXX_EXTENSIONS OFF
@@ -16,21 +18,21 @@ set_target_properties("TwoWheeledRobot"
   POSITION_INDEPENDENT_CODE 1
   )
 
-target_compile_features("TwoWheeledRobot"
+target_compile_features(${PROJECT_NAME}
   PUBLIC cxx_std_17
   )
 
-target_compile_options("TwoWheeledRobot"
+target_compile_options(${PROJECT_NAME}
   PUBLIC
   ${CXX_FLAGS}
   )
 
-target_link_libraries("TwoWheeledRobot"
+target_link_libraries(${PROJECT_NAME}
   PRIVATE
   BeagleBoneIO
   )
 
-target_include_directories("TwoWheeledRobot"
+target_include_directories(${PROJECT_NAME}
   PUBLIC
   include
   )

@@ -1,6 +1,5 @@
 #include "BeagleBoneIO/MotorChannel.h"
 #include <stdexcept>
-// cppcheck-suppress missingInclude
 #include "rc/motor.h"
 
 template <typename CFunction, typename... Args>
@@ -20,17 +19,17 @@ MotorChannel::MotorChannel(int pwmFrequency) {
 MotorChannel::~MotorChannel() { callErrorCodeToException(&rc_motor_cleanup); }
 
 // cppcheck-suppress unusedFunction
-void MotorChannel::Set(ChannelNumber ch, double duty) {
+void MotorChannel::set(ChannelNumber ch, double duty) {
   callErrorCodeToException(&rc_motor_set, static_cast<int>(ch), duty);
 }
 
 // cppcheck-suppress unusedFunction
-void MotorChannel::BreakMotor(ChannelNumber ch) {
+void MotorChannel::breakMotor(ChannelNumber ch) {
   callErrorCodeToException(&rc_motor_brake, static_cast<int>(ch));
 }
 
 // cppcheck-suppress unusedFunction
-void MotorChannel::EnableFreeSpin(ChannelNumber ch) {
+void MotorChannel::enableFreeSpin(ChannelNumber ch) {
   callErrorCodeToException(&rc_motor_free_spin, static_cast<int>(ch));
 }
 

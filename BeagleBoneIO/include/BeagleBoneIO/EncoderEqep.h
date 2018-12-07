@@ -11,11 +11,10 @@ enum class EncoderPosition {
 class EncoderEqep {
  public:
   explicit EncoderEqep(EncoderPosition pos);
-  // cppcheck-suppress functionConst; ifstream operator>> is not const
-  [[nodiscard]] int Read();
+  [[nodiscard]] uint32_t read();
 
  private:
-  std::ifstream eqepPosFile;
+  std::ifstream m_eqepPosFile;
 };
 }  // namespace BeagleBoneIO
 #endif  // BEAGLEBONEIO_INCLUDE_BEAGLEBONEIO_ENCODEREQEP_H_

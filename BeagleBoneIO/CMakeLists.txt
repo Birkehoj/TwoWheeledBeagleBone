@@ -9,21 +9,21 @@ list(APPEND _sources
   src/MotorChannel.cpp
   )
 
-add_library("BeagleBoneIO"
+add_library(${PROJECT_NAME}
   STATIC
   ${_sources}
   )
 
-target_compile_features("BeagleBoneIO"
+target_compile_features(${PROJECT_NAME}
   PUBLIC cxx_std_17
   )
 
-target_compile_options("BeagleBoneIO"
+target_compile_options(${PROJECT_NAME}
   PUBLIC
   ${CXX_FLAGS}
   )
 
-set_target_properties("BeagleBoneIO"
+set_target_properties(${PROJECT_NAME}
   PROPERTIES
   CXX_STANARD 17
   CXX_EXTENSIONS OFF
@@ -31,12 +31,12 @@ set_target_properties("BeagleBoneIO"
   POSITION_INDEPENDENT_CODE ON
   )
 
-target_include_directories("BeagleBoneIO"
+target_include_directories(${PROJECT_NAME}
   PUBLIC
   ./include
   )
 
-target_link_libraries("BeagleBoneIO"
+target_link_libraries(${PROJECT_NAME}
   PRIVATE
   robotics_cape
   CompilerSetup

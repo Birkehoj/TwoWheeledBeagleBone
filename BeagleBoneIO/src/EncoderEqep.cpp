@@ -24,18 +24,18 @@ EncoderEqep::EncoderEqep(EncoderPosition pos) {
   if (std::ofstream fs(encoderPosPath); fs.is_open()) {
     fs << 0;
   }
-
-  eqepPosFile.open(encoderPosPath);
+  m_eqepPosFile.open(encoderPosPath);
   std::fstream enabledFs(path + "/enabled");
-  if (!eqepPosFile.is_open() || !enabledFs.is_open()) {
+  if (!m_eqepPosFile.is_open() || !enabledFs.is_open()) {
     throw std::runtime_error("Failed to open encoder files.");
   }
   enabledFs << "1";
 }
-// cppcheck-suppress unusedFunction
-int EncoderEqep::Read() {
-  int encoderValue;
-  eqepPosFile >> encoderValue;
+
+uint32_t EncoderEqep::read() {
+  m_eqepPosFile.seekg(0, std::ios::beg);
+  uint32_t encoderValue;
+  m_eqepPosFile >> encoderValue;
   return encoderValue;
 }
 
