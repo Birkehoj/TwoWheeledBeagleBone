@@ -26,9 +26,8 @@ EncoderEqep::EncoderEqep(EncoderPosition pos) {
   }
   m_eqepPosFile.open(encoderPosPath);
   std::fstream enabledFs(path + "/enabled");
-  if (!m_eqepPosFile.is_open() || !enabledFs.is_open()) {
-    throw std::runtime_error("Failed to open encoder files.");
-  }
+  m_eqepPosFile.exceptions();
+  enabledFs.exceptions();
   enabledFs << "1";
 }
 

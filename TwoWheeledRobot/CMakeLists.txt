@@ -2,12 +2,11 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 
 project("TwoWheeledRobot" LANGUAGES C CXX)
 
-list(APPEND _sources
+add_executable(${PROJECT_NAME}
   src/main.cpp
   )
 
-add_executable(${PROJECT_NAME} ${_sources})
-
+# Link time optimizations for release builds
 #set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
 
 set_target_properties(${PROJECT_NAME}
@@ -22,14 +21,10 @@ target_compile_features(${PROJECT_NAME}
   PUBLIC cxx_std_17
   )
 
-target_compile_options(${PROJECT_NAME}
-  PUBLIC
-  ${CXX_FLAGS}
-  )
-
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
   BeagleBoneIO
+  CompilerSetup
   )
 
 target_include_directories(${PROJECT_NAME}

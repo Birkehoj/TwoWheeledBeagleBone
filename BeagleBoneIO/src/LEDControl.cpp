@@ -5,15 +5,15 @@
 namespace BeagleBoneIO {
 namespace Details {
 void SetTrigger(char const* filePath, char const* triggerType) noexcept {
-  if (std::ofstream fs(filePath); fs.good()) {
-    fs << triggerType;
-  }
+  std::ofstream fs(filePath);
+  fs.exceptions();
+  fs << triggerType;
 }
 
 void SetBrightness(char const* filePath, uint8_t brightness) noexcept {
-  if (std::ofstream fs(filePath); fs.good()) {
-    fs << static_cast<int>(brightness);
-  }
+  std::ofstream fs(filePath);
+  fs.exceptions();
+  fs << static_cast<int>(brightness);
 }
 }  // namespace Details
 }  // namespace BeagleBoneIO

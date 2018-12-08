@@ -2,25 +2,16 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 
 project("BeagleBoneIO" LANGUAGES C CXX)
 
-list(APPEND _sources
+add_library(${PROJECT_NAME}
+  STATIC
   src/LEDControl.cpp
   src/OnBoardButtons.cpp
   src/EncoderEqep.cpp
   src/MotorChannel.cpp
   )
 
-add_library(${PROJECT_NAME}
-  STATIC
-  ${_sources}
-  )
-
 target_compile_features(${PROJECT_NAME}
   PUBLIC cxx_std_17
-  )
-
-target_compile_options(${PROJECT_NAME}
-  PUBLIC
-  ${CXX_FLAGS}
   )
 
 set_target_properties(${PROJECT_NAME}
