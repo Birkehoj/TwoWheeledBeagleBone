@@ -67,6 +67,7 @@ class LED {
 
  private:
 #define TRIGGER_PATH "trigger"
+  // cppcheck-suppress functionStatic; not static to maintain invarinances
   inline void setTriggerType(char const* triggerType) noexcept {
     if constexpr (ledType == LEDType::GREEN) {
       Details::SetTrigger(GREEN_TYPE TRIGGER_PATH, triggerType);
