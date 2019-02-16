@@ -1,11 +1,14 @@
 #!/bin/bash
 
-if [[ ! -d build ]]; then
-	mkdir -p build
+build_path="build"
+
+if [[ ! -d $build_path ]]; then
+	mkdir -p $build_path
 fi
 
-cd build
+cd $build_path
 
 cmake .. -DCMAKE_TOOLCHAIN_FILE=arm-toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
 cpucount=`nproc`
-cmake --build . -- -j${cpucount}
+cmake --build . --clean-first -- -j${cpucount}
+#-grecord-gcc-switches

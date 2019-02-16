@@ -6,8 +6,8 @@ add_executable(${PROJECT_NAME}
   src/main.cpp
   )
 
-# Link time optimizations for release builds
-#set_property(TARGET ${PROJECT_NAME} PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
+include(CheckIPOSupported)
+check_ipo_supported(RESULT ipoSupported)
 
 set_target_properties(${PROJECT_NAME}
   PROPERTIES
@@ -15,6 +15,8 @@ set_target_properties(${PROJECT_NAME}
   CXX_EXTENSIONS OFF
   CXX_STANARD_REQUIRED ON
   POSITION_INDEPENDENT_CODE 1
+  INTERPROCEDURAL_OPTIMIZATION ${ipoSupported}
+  LINK_WHAT_YOU_USE TRUE
   )
 
 target_compile_features(${PROJECT_NAME}

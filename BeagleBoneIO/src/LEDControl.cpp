@@ -1,6 +1,5 @@
 #include "BeagleBoneIO/LEDControl.h"
 #include <fstream>
-#include <iostream>
 
 namespace BeagleBoneIO {
 namespace Details {

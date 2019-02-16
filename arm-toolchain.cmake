@@ -18,13 +18,11 @@ set(TOOLCHAIN_PREFIX arm-linux-gnueabi-)
 #set(CMAKE_CXX_COMPILER ${TOOLCHAIN_PREFIX}g++-${_USED_GCC_VERSION})
 
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
-#set(CMAKE_C_COMPILER /usr/lib/ccache/arm-linux-gnueabi-gcc-8)
-#set(CMAKE_CXX_COMPILER /usr/lib/ccache/arm-linux-gnueabi-g++-8)
-set(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabi-gcc-8)
-set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabi-g++-8)
+set(CMAKE_C_COMPILER /usr/bin/arm-linux-gnueabihf-gcc-8)
+set(CMAKE_CXX_COMPILER /usr/bin/arm-linux-gnueabihf-g++-8)
 
+set(CMAKE_SYSTEM_PROCESSOR arm)
 set(CMAKE_ASM_COMPILER ${CMAKE_C_COMPILER})
-
 
 set(CMAKE_OBJCOPY ${ARM_TOOLCHAIN_DIR}/${TOOLCHAIN_PREFIX}objcopy CACHE INTERNAL "objcopy tool")
 set(CMAKE_SIZE_UTIL ${ARM_TOOLCHAIN_DIR}/${TOOLCHAIN_PREFIX}size CACHE INTERNAL "size tool")

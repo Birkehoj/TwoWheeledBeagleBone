@@ -6,6 +6,14 @@ add_library(${PROJECT_NAME} INTERFACE)
 
 target_compile_options(${PROJECT_NAME}
   INTERFACE
+  -O3
+  # arm specific, should probably not be here
+  -mcpu=cortex-a8
+  -mhard-float
+  -mfloat-abi=hard
+  -mfpu=neon
+  -mtune=cortex-a8
+  # Standard GCC stuff
   -Wall
   -Wextra # reasonable and standard
   -Wshadow # warn the user if a variable declaration shadows one from a
@@ -40,6 +48,8 @@ target_compile_options(${PROJECT_NAME}
   -Wuseless-cast
   -Wshadow
   -Wformat=2
+  -Weffc++
+  -Werror=implicit-function-declaration
   # (ie printf)
   #						-Wno-c++98-compat
   #						-Wno-c++98-compat-pedantic

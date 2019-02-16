@@ -1,5 +1,6 @@
 #include "BeagleBoneIO/MotorChannel.h"
 #include <stdexcept>
+#include <utility>
 #include "rc/motor.h"
 
 template <typename CFunction, typename... Args>
