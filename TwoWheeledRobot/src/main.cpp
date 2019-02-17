@@ -15,7 +15,7 @@ constexpr auto leftMotorNo = BeagleBoneIO::ChannelNumber::four;
 
 static volatile std::atomic_bool continueRunning = true;
 
-static void my_function(int /*sig*/) {
+static void shutdownHandler(int /*sig*/) {
   std::cout << "shutdown signal detected" << std::endl;
   continueRunning = false;
 }
@@ -27,7 +27,7 @@ void term(int /*signum*/) {
 
 int main() {
   // Register signals
-  signal(SIGINT, my_function);
+  signal(SIGINT, shutdownHandler);
   struct sigaction action {};
   action.sa_handler = term;
   sigaction(SIGTERM, &action, nullptr);
