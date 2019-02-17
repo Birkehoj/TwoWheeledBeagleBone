@@ -30,7 +30,7 @@ EncoderEqep::EncoderEqep(EncoderPosition pos)
 uint32_t EncoderEqep::read() {
   uint32_t encoderValue;
   m_eqepPosFile >> encoderValue;
-  m_eqepPosFile.seekg(0, std::ios::beg); // Prepare for next operation
+  m_eqepPosFile.seekg(0, std::ios::beg);  // Prepare for next operation
   return encoderValue;
 }
 

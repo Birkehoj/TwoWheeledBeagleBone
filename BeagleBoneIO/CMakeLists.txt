@@ -7,7 +7,7 @@ add_library(${PROJECT_NAME}
   src/LEDControl.cpp
   src/OnBoardButtons.cpp
   src/EncoderEqep.cpp
-  src/MotorChannel.cpp
+  src/MotorsController.cpp
   )
 
 target_compile_features(${PROJECT_NAME}

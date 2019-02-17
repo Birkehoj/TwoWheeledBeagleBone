@@ -1,4 +1,4 @@
-#include "BeagleBoneIO/MotorChannel.h"
+#include "BeagleBoneIO/MotorsController.h"
 #include <stdexcept>
 #include <utility>
 #include "rc/motor.h"
@@ -13,24 +13,24 @@ static inline void callErrorCodeToException(CFunction function,
 }
 
 namespace BeagleBoneIO {
-MotorChannel::MotorChannel(int pwmFrequency) {
+MotorsController::MotorsController(int pwmFrequency) {
   callErrorCodeToException(&rc_motor_init_freq, pwmFrequency);
 }
 
-MotorChannel::~MotorChannel() { callErrorCodeToException(&rc_motor_cleanup); }
+MotorsController::~MotorsController() { rc_motor_cleanup(); }
 
 // cppcheck-suppress unusedFunction
-void MotorChannel::set(ChannelNumber ch, double duty) {
+void MotorsController::set(ChannelNumber ch, double duty) {
   callErrorCodeToException(&rc_motor_set, static_cast<int>(ch), duty);
 }
 
 // cppcheck-suppress unusedFunction
-void MotorChannel::breakMotor(ChannelNumber ch) {
+void MotorsController::breakMotor(ChannelNumber ch) {
   callErrorCodeToException(&rc_motor_brake, static_cast<int>(ch));
 }
 
 // cppcheck-suppress unusedFunction
-void MotorChannel::enableFreeSpin(ChannelNumber ch) {
+void MotorsController::enableFreeSpin(ChannelNumber ch) {
   callErrorCodeToException(&rc_motor_free_spin, static_cast<int>(ch));
 }
 

@@ -8,7 +8,7 @@
 
 #include "BeagleBoneIO/EncoderEqep.h"
 #include "BeagleBoneIO/LEDControl.h"
-#include "BeagleBoneIO/MotorChannel.h"
+#include "BeagleBoneIO/MotorsController.h"
 
 namespace Ch = std::chrono;
 constexpr auto leftMotorNo = BeagleBoneIO::ChannelNumber::four;
@@ -28,13 +28,12 @@ void term(int /*signum*/) {
 int main() {
   // Register signals
   signal(SIGINT, my_function);
-  struct sigaction action;
-  memset(&action, 0, sizeof(struct sigaction));
+  struct sigaction action {};
   action.sa_handler = term;
   sigaction(SIGTERM, &action, nullptr);
 
   BeagleBoneIO::EncoderEqep leftEncoder{BeagleBoneIO::EncoderPosition::third};
-  BeagleBoneIO::MotorChannel leftMotor;  // 4, right = 1
+  BeagleBoneIO::MotorsController leftMotor;  // 4, right = 1
   std::cout << "Two wheeled robot operational" << std::endl;
   std::cout << "Testing LED's" << std::endl;
   using BeagleBoneIO::LED;
