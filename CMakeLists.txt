@@ -4,7 +4,6 @@ project("TwoWheeledBeagleBone" LANGUAGES C CXX)
 
 include(cppcheck.cmake)
 include(cpplint.cmake)
-include(IncludeWhatYouUse.cmake)
 
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
