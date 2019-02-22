@@ -52,6 +52,10 @@ set(_gcc_compiler_warnings_flags
   -Wduplicated-branches
   -Wuseless-cast
 
+  # Linker
+  -Wl,-z,defs # Detect and reject underlinking
+  -Wl,-z,now #Disable lazy binding
+
   # Might not be wanted in the future
   #						-Wno-c++98-compat
   #						-Wno-c++98-compat-pedantic
@@ -70,21 +74,25 @@ set(_clang_compiler_warnings
   -Wno-c++98-compat-pedantic
   )
 
-set(_cxx_flags_debug
-  -O1
-  )
+if(CMAKE_BUILD_TYPE EQUAL Debug)
+  list(APPEND _optimizations
+    -O1
+    )
+elseif(CMAKE_BUILD_TYPE EQUAL Release)
+  list(APPEND _optimizations
+    -O3
+    -free-loop-vectorize
+    )
+endif()
 
-set(_cxx_flags_release
-  -O3
-  )
-
-set(_beaglebone_build_optimizations
-  -mcpu=cortex-a8
-  -mhard-float
-  -mfloat-abi=hard
-  -mfpu=neon
-  -mtune=cortex-a8
-  )
+if(target_beaglebone)
+  list(APPEND _optimizations
+    -mhard-float
+    -mfloat-abi=hard
+    -mfpu=neon
+    -mtune=cortex-a8
+    )
+endif()
 
 target_compile_options(${PROJECT_NAME}
   INTERFACE
@@ -99,9 +107,5 @@ target_compile_options(${PROJECT_NAME}
   # clang warnings
   $<$<CXX_COMPILER_ID:Clang>:${_clang_compiler_warnings}>
 
-  $<$<CONFIG:Debug>:${_cxx_flags_debug}>
-  $<$<CONFIG:Release>:${_cxx_flags_release}>
-
-  # Platform specific optimizations
-  $<$<BOOL:TARGET_BEAGLEBONE>:${_beaglebone_build_optimizations}>
+  ${_optimizations}
   )
