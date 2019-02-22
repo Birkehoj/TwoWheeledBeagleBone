@@ -20,7 +20,7 @@ static void shutdownHandler(int /*sig*/) {
   continueRunning = false;
 }
 
-void term(int /*signum*/) {
+static void term(int /*signum*/) {
   std::cout << "terminate signal detected" << std::endl;
   continueRunning = false;
 }
@@ -29,7 +29,12 @@ int main() {
   // Register signals
   signal(SIGINT, shutdownHandler);
   struct sigaction action {};
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
   action.sa_handler = term;
+#pragma clang diagnostic pop
+
   sigaction(SIGTERM, &action, nullptr);
 
   BeagleBoneIO::EncoderEqep leftEncoder{BeagleBoneIO::EncoderPosition::third};
@@ -58,7 +63,7 @@ int main() {
       //          now);
       //      now = Ch::steady_clock::now();
       // std::cout << "Time elabsed " << duration.count()
-      //<< std::endl;
+      // << std::endl;
       std::cout << "encoder value: " << (leftEncoder.read()) << std::endl;
     }
     std::this_thread::sleep_until(nextAwakeTime);
