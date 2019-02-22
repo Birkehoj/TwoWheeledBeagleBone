@@ -4,16 +4,7 @@ project("CompilerSetup")
 
 add_library(${PROJECT_NAME} INTERFACE)
 
-set(ARM_BUILD_OPTIMIZATIONS
-  # arm specific, should probably not be here
-  -mcpu=cortex-a8
-  -mhard-float
-  -mfloat-abi=hard
-  -mfpu=neon
-  -mtune=cortex-a8
-  )
-
-set(COMMON_COMPILER_WARNINGS_FLAGS
+set(_common_compiler_warnings_flag
   # Standard GCC stuff
   -Wall
   -Wextra # reasonable and standard
@@ -42,11 +33,10 @@ set(COMMON_COMPILER_WARNINGS_FLAGS
   -Wformat=2
   -Weffc++
   -Werror=implicit-function-declaration
-
-  -Wno-unknown-pragmas
+  -Wno-unknown-pragmas # allows for inline compiler specific ignore warnings
   )
 
-set(GCC_COMPILER_WARNINGS_FLAGS
+set(_gcc_compiler_warnings_flags
   -Wduplicated-cond # warn if if / else chain has duplicated conditions
   -Wduplicated-branches # warn if if / else branches have duplicated code
   -Wlogical-op # warn about logical operations being used where bitwise were
@@ -61,39 +51,8 @@ set(GCC_COMPILER_WARNINGS_FLAGS
   -Wduplicated-cond
   -Wduplicated-branches
   -Wuseless-cast
-  )
 
-set(CLANG_COMPILER_WARNINGS
-  -Weverything
-  -Wno-c++98-compat
-  -Wno-c++98-compat-pedantic
-  )
-
-set(CXX_FLAGS_DEBUG
-  -O1
-  )
-
-set(CXX_FLAGS_RELEASE
-  -O3
-  )
-
-target_compile_options(${PROJECT_NAME}
-  INTERFACE
-
-  # clang/GCC warnings
-  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
-  ${COMMON_COMPILER_WARNINGS_FLAGS}>
-
-  # GCC warnings
-  $<$<CXX_COMPILER_ID:GNU>:${GCC_COMPILER_WARNINGS_FLAGS}>
-
-  # clang warnings
-  $<$<CXX_COMPILER_ID:Clang>:${CLANG_COMPILER_WARNINGS}>
-
-  $<$<CONFIG:Debug>:${CXX_FLAGS_DEBUG}>
-  $<$<CONFIG:Release>:${CXX_FLAGS_RELEASE}>
-
-  # (ie printf)
+  # Might not be wanted in the future
   #						-Wno-c++98-compat
   #						-Wno-c++98-compat-pedantic
   #						-Wno-exit-time-destructors
@@ -103,4 +62,46 @@ target_compile_options(${PROJECT_NAME}
   #						-Wno-switch-enum
   #						-Wno-missing-prototypes
   #						-Wno-used-but-marked-unused
+  )
+
+set(_clang_compiler_warnings
+  -Weverything
+  -Wno-c++98-compat
+  -Wno-c++98-compat-pedantic
+  )
+
+set(_cxx_flags_debug
+  -O1
+  )
+
+set(_cxx_flags_release
+  -O3
+  )
+
+set(_beaglebone_build_optimizations
+  -mcpu=cortex-a8
+  -mhard-float
+  -mfloat-abi=hard
+  -mfpu=neon
+  -mtune=cortex-a8
+  )
+
+target_compile_options(${PROJECT_NAME}
+  INTERFACE
+
+  # clang/GCC warnings
+  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
+  ${_common_compiler_warnings_flag}>
+
+  # GCC warnings
+  $<$<CXX_COMPILER_ID:GNU>:${_gcc_compiler_warnings_flags}>
+
+  # clang warnings
+  $<$<CXX_COMPILER_ID:Clang>:${_clang_compiler_warnings}>
+
+  $<$<CONFIG:Debug>:${_cxx_flags_debug}>
+  $<$<CONFIG:Release>:${_cxx_flags_release}>
+
+  # Platform specific optimizations
+  $<$<BOOL:TARGET_BEAGLEBONE>:${_beaglebone_build_optimizations}>
   )
