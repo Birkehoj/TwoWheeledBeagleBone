@@ -4,6 +4,8 @@
 
 BasedOnStyle: Chromium
 
+Language: Cpp
+
 # Allow double brackets such as std::vector<std::vector<int>>.
 Standard: Cpp11
 
@@ -61,6 +63,7 @@ IndentPPDirectives: AfterHash
 AlignEscapedNewlines: false
 
 IncludeBlocks: Regroup
+SortIncludes: true
 
 IndentCaseLabels: true
 
@@ -81,3 +84,4 @@ SpaceBeforeParens: ControlStatements
 SpacesBeforeTrailingComments: 2
 
 SpacesInParentheses: false
+SpaceBeforeAssignmentOperators: true
