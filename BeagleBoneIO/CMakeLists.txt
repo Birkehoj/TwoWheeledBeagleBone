@@ -23,6 +23,8 @@ target_compile_features(${PROJECT_NAME}
     cxx_std_17
   )
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 include(CheckIPOSupported)
 check_ipo_supported(RESULT ipoSupported)
 

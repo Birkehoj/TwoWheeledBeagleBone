@@ -10,6 +10,6 @@ public:
 		pause,
 		mode,
 	};
-	explicit OnBoardButtons(ButtonType) {}
+	explicit OnBoardButtons(ButtonType /*buttonType*/) {}
 };
 }  // namespace BeagleBoneIO

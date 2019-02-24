@@ -9,6 +9,8 @@ add_executable(${PROJECT_NAME}
 include(CheckIPOSupported)
 check_ipo_supported(RESULT ipoSupported)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set_target_properties(${PROJECT_NAME}
   PROPERTIES
     CXX_EXTENSIONS OFF
