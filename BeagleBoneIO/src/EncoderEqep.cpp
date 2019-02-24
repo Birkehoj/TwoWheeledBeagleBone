@@ -23,7 +23,6 @@ namespace BeagleBoneIO
 {
 EncoderEqep::EncoderEqep(EncoderPosition pos)
     : m_eqepPosFile(getFilePath(pos) + "/position")
-    , test(0)
 {
 	m_eqepPosFile.exceptions();
 	write(0);

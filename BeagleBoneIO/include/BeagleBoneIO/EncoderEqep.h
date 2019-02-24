@@ -21,7 +21,6 @@ public:
 
 private:
 	std::fstream m_eqepPosFile;
-	int test;
 };
 }  // namespace BeagleBoneIO
 #endif  // BEAGLEBONEIO_INCLUDE_BEAGLEBONEIO_ENCODEREQEP_H_
