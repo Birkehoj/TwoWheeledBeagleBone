@@ -14,15 +14,16 @@ add_custom_target(
   --inline-suppr
   --language=c++
   --verbose
-  --suppress=missingIncludeSystem
+  -j5
+  --suppress=unusedFunction
   -I${CMAKE_SOURCE_DIR}/BeagleBoneIO/include
-#  --template='{file}:{line},{severity},{id},{message}'
-  --suppress=syntaxError # c++17 features not supported
-  -i${CMAKE_SOURCE_DIR}/LibRobotControl/*
-  -i${CMAKE_SOURCE_DIR}/LibRobotControl/include/*
-#  -j5
-  --xml
-  -I${CMAKE_SOURCE_DIR}/LibRobotControl/library/include
+  -i${CMAKE_SOURCE_DIR}/ExternalDependencies/LibRobotControl/*
+  -I${CMAKE_SOURCE_DIR}/ExternalDependencies/LibRobotControl/LibRobotControl/library/include
   -DMAVLINK_EXTERNAL_RX_BUFFER
+#  --xml
 #  --check-config
+
+#  --template='{file}:{line},{severity},{id},{message}'
+#  --suppress=syntaxError # c++17 features not supported # Unmatched suppression
+#  --suppress=missingIncludeSystem # Unmatched suppression
 )
