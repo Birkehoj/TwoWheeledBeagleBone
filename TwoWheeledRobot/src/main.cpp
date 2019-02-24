@@ -38,7 +38,7 @@ int main()
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdisabled-macro-expansion"
-	action.sa_handler = term;
+	action.sa_handler = term;  // NOLINT
 #pragma clang diagnostic pop
 
 	sigaction(SIGTERM, &action, nullptr);

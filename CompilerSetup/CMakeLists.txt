@@ -57,15 +57,15 @@ set(_gcc_compiler_warnings_flags
   -Wl,-z,now #Disable lazy binding
 
   # Might not be wanted in the future
-  #						-Wno-c++98-compat
-  #						-Wno-c++98-compat-pedantic
-  #						-Wno-exit-time-destructors
-  #						-Wno-global-constructors
-  #						-Wno-gnu-zero-variadic-macro-arguments
-  #						-Wno-documentation
-  #						-Wno-switch-enum
-  #						-Wno-missing-prototypes
-  #						-Wno-used-but-marked-unused
+  # -Wno-c++98-compat
+  # -Wno-c++98-compat-pedantic
+  # -Wno-exit-time-destructors
+  # -Wno-global-constructors
+  # -Wno-gnu-zero-variadic-macro-arguments
+  # -Wno-documentation
+  # -Wno-switch-enum
+  # -Wno-missing-prototypes
+  # -Wno-used-but-marked-unused
   )
 
 set(_clang_compiler_warnings
