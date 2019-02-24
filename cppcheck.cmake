@@ -1,5 +1,8 @@
 # additional target to perform cppcheck run, requires cppcheck
 
+include(ProcessorCount)
+ProcessorCount(N)
+
 add_custom_target(
   cppcheck
   COMMAND cppcheck
@@ -14,7 +17,8 @@ add_custom_target(
   --inline-suppr
   --language=c++
   --verbose
-  -j5
+  --error-exitcode=1
+  -j${N}
   --suppress=unusedFunction
   -I${CMAKE_SOURCE_DIR}/BeagleBoneIO/include
   -i${CMAKE_SOURCE_DIR}/ExternalDependencies/LibRobotControl/*

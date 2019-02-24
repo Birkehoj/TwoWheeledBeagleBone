@@ -32,7 +32,7 @@ set(_common_compiler_warnings_flag
   -Wshadow
   -Wformat=2
   -Weffc++
-  -Werror=implicit-function-declaration
+#  -Werror=implicit-function-declaration
   -Wno-unknown-pragmas # allows for inline compiler specific ignore warnings
   )
 
