@@ -96,16 +96,15 @@ endif()
 
 target_compile_options(${PROJECT_NAME}
   INTERFACE
+    # clang/GCC warnings
+    $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
+    ${_common_compiler_warnings_flag}>
 
-  # clang/GCC warnings
-  $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
-  ${_common_compiler_warnings_flag}>
+    # GCC warnings
+    $<$<CXX_COMPILER_ID:GNU>:${_gcc_compiler_warnings_flags}>
 
-  # GCC warnings
-  $<$<CXX_COMPILER_ID:GNU>:${_gcc_compiler_warnings_flags}>
+    # clang warnings
+    $<$<CXX_COMPILER_ID:Clang>:${_clang_compiler_warnings}>
 
-  # clang warnings
-  $<$<CXX_COMPILER_ID:Clang>:${_clang_compiler_warnings}>
-
-  ${_optimizations}
+    ${_optimizations}
   )

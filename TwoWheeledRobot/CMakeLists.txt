@@ -11,25 +11,27 @@ check_ipo_supported(RESULT ipoSupported)
 
 set_target_properties(${PROJECT_NAME}
   PROPERTIES
-  CXX_STANARD 17
-  CXX_EXTENSIONS OFF
-  CXX_STANARD_REQUIRED ON
-  POSITION_INDEPENDENT_CODE 1
-  INTERPROCEDURAL_OPTIMIZATION ${ipoSupported}
-  LINK_WHAT_YOU_USE TRUE
+    CXX_EXTENSIONS OFF
+    CXX_STANARD 17
+    CXX_STANARD_REQUIRED ON
+    INTERPROCEDURAL_OPTIMIZATION ${ipoSupported}
+    LINK_WHAT_YOU_USE TRUE
+    POSITION_INDEPENDENT_CODE 1
   )
 
 target_compile_features(${PROJECT_NAME}
-  PUBLIC cxx_std_17
+  PUBLIC
+    cxx_std_17
   )
 
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
-  BeagleBoneIO
-  CompilerSetup
+    BeagleBoneIO
+    CompilerSetup
+
   )
 
 target_include_directories(${PROJECT_NAME}
   PUBLIC
-  include
+    include
   )

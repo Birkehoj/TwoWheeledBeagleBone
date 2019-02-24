@@ -2,16 +2,25 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 
 project("BeagleBoneIO" LANGUAGES C CXX)
 
-add_library(${PROJECT_NAME}
-  STATIC
-  src/LEDControl.cpp
-  src/OnBoardButtons.cpp
-  src/EncoderEqep.cpp
-  src/MotorsController.cpp
+add_library(${PROJECT_NAME} STATIC "")
+
+target_sources(${PROJECT_NAME}
+  PRIVATE
+    # Headers
+    include/BeagleBoneIO/EncoderEqep.h
+    include/BeagleBoneIO/LEDControl.h
+    include/BeagleBoneIO/MotorsController.h
+    include/BeagleBoneIO/OnBoardButtons.h
+  # Sources
+    src/EncoderEqep.cpp
+    src/LEDControl.cpp
+    src/MotorsController.cpp
+    src/OnBoardButtons.cpp
   )
 
 target_compile_features(${PROJECT_NAME}
-  PUBLIC cxx_std_17
+  PUBLIC
+    cxx_std_17
   )
 
 include(CheckIPOSupported)
@@ -24,21 +33,21 @@ check_ipo_supported(RESULT ipoSupported)
 
 set_target_properties(${PROJECT_NAME}
   PROPERTIES
-  CXX_STANARD 17
-  CXX_EXTENSIONS OFF
-  CXX_STANARD_REQUIRED ON
-  POSITION_INDEPENDENT_CODE ON
-  INTERPROCEDURAL_OPTIMIZATION ${ipoSupported}
-  LINK_WHAT_YOU_USE TRUE
+    CXX_EXTENSIONS OFF
+    CXX_STANARD 17
+    CXX_STANARD_REQUIRED ON
+    INTERPROCEDURAL_OPTIMIZATION ${ipoSupported}
+    LINK_WHAT_YOU_USE TRUE
+    POSITION_INDEPENDENT_CODE ON
   )
 
 target_include_directories(${PROJECT_NAME}
   PUBLIC
-  ./include
+    ./include
   )
 
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
-  robotics_cape
-  CompilerSetup
+    CompilerSetup
+    robotics_cape
   )
