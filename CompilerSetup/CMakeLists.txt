@@ -85,7 +85,7 @@ elseif(CMAKE_BUILD_TYPE EQUAL Release)
     )
 endif()
 
-if(target_beaglebone)
+if(TARGET_BEAGLEBONE)
   list(APPEND _optimizations
     -mhard-float
     -mfloat-abi=hard

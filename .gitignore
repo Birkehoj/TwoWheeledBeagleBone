@@ -10,3 +10,5 @@ CTestTestfile.cmake
 CMakeLists.txt.user
 library/Makefile
 build*/
+*.cbp
+*.a

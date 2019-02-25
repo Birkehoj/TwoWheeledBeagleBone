@@ -68,7 +68,7 @@ SortIncludes: true
 IndentCaseLabels: true
 
 # Indentation, change all numbers together
-UseTab: ForIndentation
+UseTab: Always
 TabWidth: 4
 IndentWidth: 4
 AccessModifierOffset: -4

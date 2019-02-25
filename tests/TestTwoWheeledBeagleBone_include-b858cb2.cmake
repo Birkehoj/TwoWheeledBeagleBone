@@ -1,0 +1,5 @@
+if(EXISTS "/home/anders/workspace/BeagleBone/TwoWheeledBeagleBone/tests/TestTwoWheeledBeagleBone_tests-b858cb2.cmake")
+  include("/home/anders/workspace/BeagleBone/TwoWheeledBeagleBone/tests/TestTwoWheeledBeagleBone_tests-b858cb2.cmake")
+else()
+  add_test(TestTwoWheeledBeagleBone_NOT_BUILT-b858cb2 TestTwoWheeledBeagleBone_NOT_BUILT-b858cb2)
+endif()

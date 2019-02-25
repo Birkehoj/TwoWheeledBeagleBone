@@ -2,10 +2,15 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 
 project("TwoWheeledBeagleBone" LANGUAGES C CXX)
 
+option(ENABLE_UNIT_TESTS ON "Enable unit tests")
+message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
+
+option(TARGET_BEAGLEBONE OFF "Build for beaglebone target")
+message(STATUS "Targeting beaglebone: ${TARGET_BEAGLEBONE}")
+
 include(cppcheck.cmake)
 include(cpplint.cmake)
 include(clang-tidy.cmake)
-message("Binary dir ${CMAKE_BINARY_DIR}")
 
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
@@ -22,3 +27,5 @@ add_subdirectory("ExternalDependencies")
 add_subdirectory("BeagleBoneIO")
 add_subdirectory("TwoWheeledRobot")
 add_subdirectory("CompilerSetup")
+
+add_subdirectory("tests")

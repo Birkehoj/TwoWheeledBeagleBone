@@ -4,43 +4,42 @@ arm_id="gcc-arm"
 clang_id="clang"
 gcc_id="gcc"
 
-build_prepend_path="build-"
+build_prepend_path="build"
 
-arm_build_path=$build_prepend_path$arm_id
-clag_build_path=$build_prepend_path$clang_id
-gcc_build_path=$build_prepend_path$gcc_id
+arm_build_path=$build_prepend_path/$arm_id
+clag_build_path=$build_prepend_path/$clang_id
+gcc_build_path=$build_prepend_path/$gcc_id
 
 cpucount=`nproc`
+cmakelist_dir=`pwd`
 
 build_in_folder () {
 	build_target=$1
-	build_path="$build_prepend_path$build_target"
+	build_path="$build_prepend_path/$build_target"
+
+	echo "building for target $build_target"
 
 	if [[ ! -d $build_path ]]; then
 		mkdir -p $build_path
 	fi
 
-	cd $build_path
-
 	cmake_arguments=$2
-	cmake .. $cmake_arguments -DCMAKE_BUILD_TYPE=$build_configuration -DCMAKE_CXX_FLAGS=-Werror
+
+	cmake  -B$build_path -H$cmakelist_dir $cmake_arguments -DCMAKE_BUILD_TYPE=$build_configuration -DCMAKE_CXX_FLAGS=-Werror -DENABLE_UNIT_TESTS=ON
 
 	if [[ $? -ne 0 ]]; then
 		echo "Failed to configure build for target; $build_target. Exiting"
-		cd ..
 		exit 1
 	fi
 
-	cmake --build . --clean-first -- -j${cpucount} # --clean-first 
+	cmake --build $build_path -- -j${cpucount} # --clean-first
 
 	if [[ $? -ne 0 ]]; then
 		echo "Failed to compile for target; $build_target. Exiting"
-		cd ..
 		exit 1
 	else
 		report_past_test "build for target $build_target"	
 	fi
-	cd ..
 }
 
 report_past_test()
@@ -50,8 +49,8 @@ report_past_test()
 
 run_clang_tidy_checks()
 {
-	clang_folder_name="build-$clang_id"
-	cmake --build $clang_folder_name --target run-clang-tidy -- -j${cpucount} > clang-tidy-warnings.txt
+	echo "Running clang-tidy"
+	cmake --build $clag_build_path --target run-clang-tidy -- -j${cpucount} > clang-tidy-warnings.txt
 
 	echo $clang-tidy-warnings
 
@@ -70,6 +69,7 @@ run_clang_tidy_checks()
 
 run_cppcheck()
 {
+	echo "Running cppcheck"
 	cmake --build $1 --target cppcheck -- -j${cpucount}
 	if [[ $? -ne 0 ]]; then
 		echo "Cppcheck failed Exiting"
@@ -81,12 +81,25 @@ run_cppcheck()
 
 run_cpplint()
 {
+	echo "Running cpplint"
 	cmake --build $1 --target cpplint -- -j${cpucount}
 	if [[ $? -ne 0 ]]; then
 		echo "Cpplint failed Exiting"
 		exit 1
 	else
 		report_past_test "cpplint"
+	fi
+}
+
+run_tests()
+{
+	echo "Running tests"
+	cmake --build $1 --target run_tests -- -j${cpucount}
+	if [[ $? -ne 0 ]]; then
+		echo "Tests failed Exiting"
+		exit 1
+	else
+		report_past_test "tests"
 	fi
 }
 
@@ -99,10 +112,15 @@ else
 	exit 1
 fi
 
+if [[ ! -d $build_prepend_path ]]; then
+	mkdir -p $build_prepend_path
+fi
 
 build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=arm-toolchain.cmake"
 build_in_folder  $clang_id "-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang"
 build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-8 -DCMAKE_C_COMPILER=gcc-8"
+
+run_tests $gcc_build_path
 
 run_clang_tidy_checks
 
@@ -112,5 +130,7 @@ run_cpplint $arm_build_path
 
 echo "Fixing formatting in BeagleboneIO"
 find BeagleBoneIO -regex '.*\.\(cpp\|h\|hpp\|cc\)' -exec clang-format -style=file -i {} \;
+echo "BeagleboneIO formatted according to project rules"
+
 
 exit 0

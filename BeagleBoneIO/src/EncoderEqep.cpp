@@ -22,7 +22,7 @@ static inline string getFilePath(EncoderPosition pos)
 namespace BeagleBoneIO
 {
 EncoderEqep::EncoderEqep(EncoderPosition pos)
-    : m_eqepPosFile(getFilePath(pos) + "/position")
+	: m_eqepPosFile(getFilePath(pos) + "/position")
 {
 	m_eqepPosFile.exceptions();
 	write(0);
@@ -36,7 +36,7 @@ uint32_t EncoderEqep::read()
 {
 	uint32_t encoderValue;
 	m_eqepPosFile >> encoderValue;
-	m_eqepPosFile.seekg(0, std::ios::beg);  // Prepare for next operation
+	m_eqepPosFile.seekg(0, std::ios::beg);  // Prepare for next operation !!!!!!!!!!!!111111
 	return encoderValue;
 }
 
