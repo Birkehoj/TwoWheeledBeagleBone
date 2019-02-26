@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 
 project("BeagleBoneIO" LANGUAGES C CXX)
 
-add_library(${PROJECT_NAME} STATIC "")
+add_library(${PROJECT_NAME} STATIC)
 
 target_sources(${PROJECT_NAME}
   PRIVATE

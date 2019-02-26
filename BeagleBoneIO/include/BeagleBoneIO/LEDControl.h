@@ -7,8 +7,8 @@ namespace BeagleBoneIO
 {
 namespace Details
 {
-void SetTrigger(char const *filePath, char const *triggerType) noexcept;
-void SetBrightness(char const *filePath, uint8_t brightness) noexcept;
+void SetTrigger(char const *filePath, char const *triggerType);
+void SetBrightness(char const *filePath, uint8_t brightness);
 }  // namespace Details
 
 enum class LEDType : uint8_t
