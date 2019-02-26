@@ -32,7 +32,7 @@ build_in_folder () {
 		exit 1
 	fi
 
-	cmake --build $build_path -- -j${cpucount} # --clean-first
+	cmake --build $build_path --target all -- -j${cpucount} # --clean-first
 
 	if [[ $? -ne 0 ]]; then
 		echo "Failed to compile for target; $build_target. Exiting"

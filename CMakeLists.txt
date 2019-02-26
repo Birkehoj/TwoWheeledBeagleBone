@@ -2,9 +2,6 @@ cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 
 project("TwoWheeledBeagleBone" LANGUAGES C CXX)
 
-option(ENABLE_UNIT_TESTS ON "Enable unit tests")
-message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
-
 option(TARGET_BEAGLEBONE OFF "Build for beaglebone target")
 message(STATUS "Targeting beaglebone: ${TARGET_BEAGLEBONE}")
 
