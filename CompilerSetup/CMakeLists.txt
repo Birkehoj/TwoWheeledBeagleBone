@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
 
 project("CompilerSetup")
 
@@ -76,7 +76,7 @@ set(_clang_compiler_warnings
 
 if(CMAKE_BUILD_TYPE EQUAL Debug)
   list(APPEND _optimizations
-    -O1
+    -Og
     )
 elseif(CMAKE_BUILD_TYPE EQUAL Release)
   list(APPEND _optimizations
@@ -107,4 +107,10 @@ target_compile_options(${PROJECT_NAME}
     $<$<CXX_COMPILER_ID:Clang>:${_clang_compiler_warnings}>
 
     ${_optimizations}
+  )
+
+target_link_options(${PROJECT_NAME}
+  INTERFACE
+    $<$<CONFIG:Debug>: "-Og" >
+    $<$<CONFIG:Release>: "-O3" >
   )
