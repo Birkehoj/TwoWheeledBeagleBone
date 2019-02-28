@@ -6,16 +6,12 @@ gcc_id="gcc"
 
 build_prepend_path="build"
 
-arm_build_path=$build_prepend_path/$arm_id
-clag_build_path=$build_prepend_path/$clang_id
-gcc_build_path=$build_prepend_path/$gcc_id
-
 cpucount=`nproc`
 cmakelist_dir=`pwd`
 
 build_in_folder () {
 	build_target=$1
-	build_path="$build_prepend_path/$build_target"
+	build_path="$build_prepend_path/$build_configuration/$build_target"
 
 	echo "building for target $build_target"
 
@@ -105,6 +101,7 @@ run_tests()
 
 # Main
 
+# Parse input
 if [[ "$1" == "Debug" || "$1" == "Release" ]]; then
 	build_configuration=$1
 else
@@ -112,13 +109,13 @@ else
 	exit 1
 fi
 
-if [[ ! -d $build_prepend_path ]]; then
-	mkdir -p $build_prepend_path
-fi
-
 build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=arm-toolchain.cmake"
 build_in_folder  $clang_id "-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang"
-build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-8 -DCMAKE_C_COMPILER=gcc-8"
+build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-8 -DCMAKE_C_COMPILER=gcc-8 -G Ninja"
+
+arm_build_path=$build_prepend_path/$build_configuration/$arm_id
+clag_build_path=$build_prepend_path/$build_configuration/$clang_id
+gcc_build_path=$build_prepend_path/$build_configuration/$gcc_id
 
 run_tests $gcc_build_path
 

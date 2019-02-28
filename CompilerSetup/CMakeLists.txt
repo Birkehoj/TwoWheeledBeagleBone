@@ -111,6 +111,6 @@ target_compile_options(${PROJECT_NAME}
 
 target_link_options(${PROJECT_NAME}
   INTERFACE
-    $<$<CONFIG:Debug>: "-Og" >
+    $<$<CONFIG:Debug>: "-O0" >
     $<$<CONFIG:Release>: "-O3" >
   )
