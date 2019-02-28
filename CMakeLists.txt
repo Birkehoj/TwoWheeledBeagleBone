@@ -1,14 +1,12 @@
-cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
 
-project("TwoWheeledBeagleBone" LANGUAGES C CXX)
+# Preable
+project("TwoWheeledBeagleBone" LANGUAGES C CXX  VERSION 0.0.1)
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" )
 
+# Project wide setup
 option(TARGET_BEAGLEBONE OFF "Build for beaglebone target")
 message(STATUS "Targeting beaglebone: ${TARGET_BEAGLEBONE}")
-
-include(cppcheck.cmake)
-include(cpplint.cmake)
-include(clang-tidy.cmake)
-
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
@@ -19,10 +17,15 @@ set( CMAKE_POSITION_INDEPENDENT_CODE ON )
 
 link_libraries("-static")
 
-#add_subdirectory("LibRobotControl/library")
+# Dependencies
 add_subdirectory("ExternalDependencies")
+
+# Main build targets
 add_subdirectory("BeagleBoneIO")
 add_subdirectory("TwoWheeledRobot")
 add_subdirectory("CompilerSetup")
 
+# Tests
 add_subdirectory("tests")
+
+# Packagaging

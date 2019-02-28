@@ -7,7 +7,7 @@ gcc_id="gcc"
 build_prepend_path="build"
 
 cpucount=`nproc`
-cmakelist_dir=`pwd`
+cmakelist_dir=`pwd`/..
 
 build_in_folder () {
 	build_target=$1
@@ -21,7 +21,7 @@ build_in_folder () {
 
 	cmake_arguments=$2
 
-	cmake  -B$build_path -H$cmakelist_dir $cmake_arguments -DCMAKE_BUILD_TYPE=$build_configuration -DCMAKE_CXX_FLAGS=-Werror -DENABLE_UNIT_TESTS=ON
+	cmake  -B$build_path -H$cmakelist_dir $cmake_arguments -DCMAKE_BUILD_TYPE=$build_configuration -DCMAKE_CXX_FLAGS=-Werror -DENABLE_UNIT_TESTS=ON -DENABLE_STATIC_ANALYSIS=ON
 
 	if [[ $? -ne 0 ]]; then
 		echo "Failed to configure build for target; $build_target. Exiting"
@@ -109,7 +109,9 @@ else
 	exit 1
 fi
 
-build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=arm-toolchain.cmake"
+cd "$cmakelist_dir" # go to root of project
+
+build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/arm-toolchain.cmake"
 build_in_folder  $clang_id "-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang"
 build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-8 -DCMAKE_C_COMPILER=gcc-8 -G Ninja"
 

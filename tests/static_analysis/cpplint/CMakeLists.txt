@@ -1,5 +1,6 @@
-# additional target to perform cpplint run, requires cpplint
+cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
 
+# additional target to perform cpplint run, requires cpplint
 add_custom_target(
   cpplint
   COMMAND cpplint

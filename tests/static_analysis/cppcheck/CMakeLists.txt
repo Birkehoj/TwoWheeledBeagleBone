@@ -1,8 +1,8 @@
-# additional target to perform cppcheck run, requires cppcheck
+cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
 
+# additional target to perform cppcheck run, requires cppcheck
 include(ProcessorCount)
 ProcessorCount(N)
-
 add_custom_target(
   cppcheck
   COMMAND cppcheck
