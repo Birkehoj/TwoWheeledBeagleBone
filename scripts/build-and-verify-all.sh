@@ -7,7 +7,8 @@ gcc_id="gcc"
 build_prepend_path="build"
 
 cpucount=`nproc`
-cmakelist_dir=`pwd`/..
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+cmakelist_dir=$script_dir/..
 
 build_in_folder () {
 	build_target=$1
@@ -15,13 +16,9 @@ build_in_folder () {
 
 	echo "building for target $build_target"
 
-	if [[ ! -d $build_path ]]; then
-		mkdir -p $build_path
-	fi
-
 	cmake_arguments=$2
 
-	cmake  -B$build_path -H$cmakelist_dir $cmake_arguments -DCMAKE_BUILD_TYPE=$build_configuration -DCMAKE_CXX_FLAGS=-Werror -DENABLE_UNIT_TESTS=ON -DENABLE_STATIC_ANALYSIS=ON
+	cmake  -B$build_path -H$cmakelist_dir $cmake_arguments -DCMAKE_BUILD_TYPE:STRING=$build_configuration -DCMAKE_CXX_FLAGS:STRING=-Werror
 
 	if [[ $? -ne 0 ]]; then
 		echo "Failed to configure build for target; $build_target. Exiting"

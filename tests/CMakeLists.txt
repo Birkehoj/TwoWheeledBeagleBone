@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
 
 project("TestTwoWheeledBeagleBone" LANGUAGES CXX)
 
-option(ENABLE_UNIT_TESTS ON "Enable unit tests.")
+option(ENABLE_UNIT_TESTS "Enable unit tests." ON)
 message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 
 if(ENABLE_UNIT_TESTS)
@@ -70,6 +70,5 @@ if(ENABLE_UNIT_TESTS)
     )
 endif()
 
-if(ENABLE_STATIC_ANALYSIS)
-  add_subdirectory(static_analysis)
-endif()
+add_subdirectory(static_analysis)
+
