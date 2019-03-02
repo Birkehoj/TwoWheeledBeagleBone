@@ -1,0 +1,3 @@
+Checks: 'boost-*,bugprone-*,cert-*,clang-analyzer-*,cppcoreguidelines-*,fuchsia-virtual-inheritance,google-*,-google-readability-braces-around-statements,hicpp-*,-hicpp-braces-around-statements,llvm-twine-local,misc-*,modernize-*,mpi-*,objc-*,performance-*,readability-*,-readability-braces-around-statements,warnings-as-errors=*'
+
+FormatStyle: file
