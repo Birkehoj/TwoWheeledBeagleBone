@@ -1,14 +1,14 @@
-#include <atomic>
-#include <chrono>
-#include <csignal>
-#include <cstdlib>
-#include <cstring>
-#include <iostream>
-#include <thread>
-
 #include "BeagleBoneIO/EncoderEqep.h"
 #include "BeagleBoneIO/LEDControl.h"
 #include "BeagleBoneIO/MotorsController.h"
+
+#include <atomic>
+#include <chrono>
+#include <csignal>
+#include <cstdint>
+#include <cstdlib>
+#include <iostream>
+#include <thread>
 
 namespace Ch = std::chrono;
 
