@@ -1,6 +1,7 @@
 #ifndef BEAGLEBONEIO_INCLUDE_BEAGLEBONEIO_ENCODEREQEP_H_
 #define BEAGLEBONEIO_INCLUDE_BEAGLEBONEIO_ENCODEREQEP_H_
 
+#include <bits/stdint-uintn.h>  // cstdint but iwyu needs this
 #include <fstream>
 
 namespace BeagleBoneIO

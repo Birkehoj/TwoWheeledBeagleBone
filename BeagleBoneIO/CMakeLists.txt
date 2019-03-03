@@ -78,6 +78,9 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
     -header-filter='.*'
     )
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+  find_program(iwyu_path NAMES include-what-you-use iwyu)
+  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${iwyu_path};-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args;-Xiwyu;--transitive_includes_only;-Xiwyu;--verbose=3 -Wno-unknown-warning-option")
 endif()
 
 # Main build targets
@@ -103,11 +106,6 @@ target_compile_features(${LIBRARY_TARGET_NAME}
 
 include(CheckIPOSupported)
 check_ipo_supported(RESULT ipoSupported)
-
-# TODO: Figure out why IWYU gives many warnings that seems like false positives at first sight
-#find_program(iwyu_path NAMES include-what-you-use iwyu)
-#set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_INCLUDE_WHAT_YOU_USE "${iwyu_path};-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args;-Xiwyu;--transitive_includes_only;-Xiwyu;--verbose=3 -Wno-unknown-warning-option")
-#  ;-Xiwyu;--transitive_includes_only --cwd=${CMAKE_CURRENT_SOURCE_DIR};-Xiwyu;--verbose=3")
 
 set_target_properties(${LIBRARY_TARGET_NAME}
   PROPERTIES

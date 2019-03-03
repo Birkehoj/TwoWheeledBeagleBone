@@ -1,7 +1,7 @@
 #ifndef BEAGLEBONEIO_INCLUDE_BEAGLEBONEIO_LEDCONTROL_H_
 #define BEAGLEBONEIO_INCLUDE_BEAGLEBONEIO_LEDCONTROL_H_
 
-#include <cstdint>
+#include <bits/stdint-uintn.h>  // cstdint but iwyu needs this
 
 namespace BeagleBoneIO
 {
