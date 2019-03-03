@@ -39,6 +39,14 @@ set(CMAKE_CXX_CPPLINT cpplint
   ${CMAKE_CURRENT_LIST_DIR}/include
   )
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(cppcheckPlatform unix64)
+  else()
+    set(cppcheckPlatform unix32)
+  endif()
+endif()
+
 set(CMAKE_CXX_CPPCHECK cppcheck
   ${CMAKE_CURRENT_LIST_DIR}/src
   ${CMAKE_CURRENT_LIST_DIR}/include
@@ -53,11 +61,14 @@ set(CMAKE_CXX_CPPCHECK cppcheck
   --verbose
   --error-exitcode=1
   --suppress=unusedFunction
+#  --check-library
+  --platform=${cppcheckPlatform}
   -j${N}
   -I${CMAKE_CURRENT_LIST_DIR}/include
   -i${CMAKE_CURRENT_LIST_DIR}/ExternalDependencies/LibRobotControl/*
   -I${CMAKE_CURRENT_LIST_DIR}/ExternalDependencies/LibRobotControl/LibRobotControl/library/include
   )
+unset(cppcheckPlatform)
 
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
   message(STATUS "Clang compiler detected, enabling clang tidy checks on builds.")
@@ -119,12 +130,18 @@ target_link_libraries(${LIBRARY_TARGET_NAME}
     robotics_cape
   )
 
-#include(CppLintTarget)
-include(SourcesFromTarget)
-getSourcePaths(${LIBRARY_TARGET_NAME} absSourcePaths)
+# Tests
+add_subdirectory("tests")
+
+# Packagaging
+
+
+# Various Testing and formating targets
+#include(SourcesFromTarget)
+#getSourcePaths(${LIBRARY_TARGET_NAME} absSourcePaths)
 include(CppCheckTarget)
-cppcheckSetup("${absSourcePaths}")
-unset(absSourcePaths)
+cppcheckSetup(${LIBRARY_TARGET_NAME})
+#unset(absSourcePaths)
 
 option(CLANGFORMAT "Setup clangformat target" ON)
 if(CLANGFORMAT)
@@ -136,8 +153,3 @@ if(CLANGFORMAT)
   clangformat_setup("${BeagleBoneIO_sources}")
   unset(BeagleBoneIO_sources)
 endif()
-
-# Tests
-add_subdirectory("tests")
-
-# Packagaging

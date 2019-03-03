@@ -1,4 +1,4 @@
-function(cppcheckSetup sourcesToCheck)
+function(cppcheckSetup target)
 
 if(NOT CPPCHECK_EXECUTABLE)
   set(CPPCHECK_EXECUTABLE cppcheck)
@@ -14,21 +14,30 @@ if(NOT EXISTS ${CPPCHECK_EXECUTABLE})
   endif()
 endif()
 
-foreach(src ${sourcesToCheck})
-  get_filename_component(src ${src} ABSOLUTE)
-  list(APPEND srcs ${src})
+
+get_target_property(target_sources ${target} SOURCES)
+
+foreach(target_src ${target_sources})
+  get_filename_component(target_src ${target_src} ABSOLUTE)
+  list(APPEND srcs ${target_src})
 endforeach()
-#set(srcs "${srcs_tmp}")
+
 unset(srcs_tmp)
+
+get_target_property(target_includes ${target} INCLUDE_DIRECTORIES)
+
+foreach(target_include ${target_includes})
+  get_filename_component(target_include ${target_include} ABSOLUTE)
+  list(APPEND includes ${target_include})
+endforeach()
 
 include(ProcessorCount)
 ProcessorCount(N)
 
-message(STATUS "Cppcheck on: ${srcs}")
-
 add_custom_target(${PROJECT_NAME}_cppcheck
   COMMAND cppcheck
   ${srcs}
+  ${includes}
   --enable=all
   --std=c++14
   --verbose

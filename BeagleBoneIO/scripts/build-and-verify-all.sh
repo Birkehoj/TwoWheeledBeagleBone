@@ -63,7 +63,7 @@ run_clang_tidy_checks()
 run_cppcheck()
 {
 	echo "Running cppcheck"
-	cmake --build $1 --target cppcheck -- -j${cpucount}
+	cmake --build $1 --target cppcheck_target -- -j${cpucount}
 	if [[ $? -ne 0 ]]; then
 		echo "Cppcheck failed Exiting"
 		exit 1
