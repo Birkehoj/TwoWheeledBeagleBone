@@ -45,7 +45,7 @@ if(ENABLE_UNIT_TESTS)
   target_link_libraries(${PROJECT_NAME}
     PRIVATE
       CompilerSetup
-      BeagleBoneIO
+      BeagleBoneIO::BeagleBoneIO_beagleBoneIO
       Catch2::Catch2
     )
 

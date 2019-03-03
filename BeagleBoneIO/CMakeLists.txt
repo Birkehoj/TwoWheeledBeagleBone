@@ -1,8 +1,13 @@
 cmake_minimum_required(VERSION 3.13)
 
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+endif()
+
 # Preable
-project("BeagleBoneIO" LANGUAGES C CXX)
-set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" )
+project(BeagleBoneIO LANGUAGES C CXX)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/)
 
 # Project wide setup
 option(TARGET_BEAGLEBONE OFF "Build for beaglebone target")
@@ -13,9 +18,11 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 
 # Always use '-fPIC'/'-fPIE' option.
-set( CMAKE_POSITION_INDEPENDENT_CODE ON )
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 link_libraries("-static")
+
+set(LIBRARY_TARGET_NAME BeagleBoneIO_beagleBoneIO)
 
 # Dependencies
 add_subdirectory("ExternalDependencies")
@@ -33,7 +40,8 @@ set(CMAKE_CXX_CPPLINT cpplint
   )
 
 set(CMAKE_CXX_CPPCHECK cppcheck
-  ${CMAKE_CURRENT_LIST_DIR}/src ${CMAKE_CURRENT_LIST_DIR}/include
+  ${CMAKE_CURRENT_LIST_DIR}/src
+  ${CMAKE_CURRENT_LIST_DIR}/include
   --enable=all
   --std=c++14
 #  --verbose
@@ -61,31 +69,23 @@ if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 endif()
 
-
 # Main build targets
-add_library(${PROJECT_NAME})
-add_subdirectory("CompilerSetup")
+add_library(${LIBRARY_TARGET_NAME})
+add_library(BeagleBoneIO::BeagleBoneIO_beagleBoneIO ALIAS ${LIBRARY_TARGET_NAME})
+
+add_subdirectory(CompilerSetup)
 add_subdirectory(src)
 
-# Tests
-add_subdirectory("tests")
-
-# Packagaging
-target_sources(${PROJECT_NAME}
+target_sources(${LIBRARY_TARGET_NAME}
   PRIVATE
     # Headers
     include/BeagleBoneIO/EncoderEqep.h
     include/BeagleBoneIO/LEDControl.h
     include/BeagleBoneIO/MotorsController.h
     include/BeagleBoneIO/OnBoardButtons.h
-  # Sources
-    src/EncoderEqep.cpp
-    src/LEDControl.cpp
-    src/MotorsController.cpp
-    src/OnBoardButtons.cpp
   )
 
-target_compile_features(${PROJECT_NAME}
+target_compile_features(${LIBRARY_TARGET_NAME}
   PUBLIC
     cxx_std_17
   )
@@ -98,7 +98,7 @@ check_ipo_supported(RESULT ipoSupported)
 #set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_INCLUDE_WHAT_YOU_USE "${iwyu_path};-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args;-Xiwyu;--transitive_includes_only;-Xiwyu;--verbose=3 -Wno-unknown-warning-option")
 #  ;-Xiwyu;--transitive_includes_only --cwd=${CMAKE_CURRENT_SOURCE_DIR};-Xiwyu;--verbose=3")
 
-set_target_properties(${PROJECT_NAME}
+set_target_properties(${LIBRARY_TARGET_NAME}
   PROPERTIES
     CXX_EXTENSIONS OFF
     CXX_STANARD 17
@@ -108,13 +108,36 @@ set_target_properties(${PROJECT_NAME}
     POSITION_INDEPENDENT_CODE ON
   )
 
-target_include_directories(${PROJECT_NAME}
+target_include_directories(${LIBRARY_TARGET_NAME}
   PUBLIC
     ./include
   )
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(${LIBRARY_TARGET_NAME}
   PRIVATE
     CompilerSetup
     robotics_cape
   )
+
+#include(CppLintTarget)
+include(SourcesFromTarget)
+getSourcePaths(${LIBRARY_TARGET_NAME} absSourcePaths)
+include(CppCheckTarget)
+cppcheckSetup("${absSourcePaths}")
+unset(absSourcePaths)
+
+option(CLANGFORMAT "Setup clangformat target" ON)
+if(CLANGFORMAT)
+  include(ClangFormat)
+
+  get_target_property(BeagleBoneIO_sources ${LIBRARY_TARGET_NAME} SOURCES)
+
+  # Setup clangformat target
+  clangformat_setup("${BeagleBoneIO_sources}")
+  unset(BeagleBoneIO_sources)
+endif()
+
+# Tests
+add_subdirectory("tests")
+
+# Packagaging

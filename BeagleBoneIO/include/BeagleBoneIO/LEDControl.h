@@ -25,23 +25,38 @@ template <LEDType ledType>
 class LED
 {
 public:
-	LED() noexcept { enableHeartBeat(); }
-	~LED() noexcept { turnOff(); }
+	LED() noexcept
+	{
+		enableHeartBeat();
+	}
+	~LED() noexcept
+	{
+		turnOff();
+	}
 	LED(const LED &) = default;
 	LED &operator=(const LED &) = default;
 	LED(LED &&) noexcept = default;
 	LED &operator=(LED &&) noexcept = default;
 
-	inline void enablePeriodicBlick() noexcept { setTriggerType("timer"); }
+	inline void enablePeriodicBlick() noexcept
+	{
+		setTriggerType("timer");
+	}
 
-	inline void enableHeartBeat() noexcept { setTriggerType("heartbeat"); }
+	inline void enableHeartBeat() noexcept
+	{
+		setTriggerType("heartbeat");
+	}
 
 #define LED_PATH "/sys/devices/platform/leds/leds/"
 #define GREEN_TYPE LED_PATH "green/"
 #define RED_TYPE LED_PATH "red/"
 #define BRIGHTNESS_PATH "brightness"
 
-	inline void turnOff() noexcept { turnOn(0); }
+	inline void turnOff() noexcept
+	{
+		turnOn(0);
+	}
 
 	inline void turnOn(uint8_t brightness = 10) noexcept
 	{

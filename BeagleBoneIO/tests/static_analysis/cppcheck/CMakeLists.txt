@@ -21,10 +21,9 @@ add_custom_target(
   --error-exitcode=1
   -j${N}
   --suppress=unusedFunction
-  -I${CMAKE_SOURCE_DIR}/include
+  -I${CMAKE_CURRENT_LIST_DIR}/../../include
   -i${CMAKE_SOURCE_DIR}/ExternalDependencies/LibRobotControl/*
   -I${CMAKE_SOURCE_DIR}/ExternalDependencies/LibRobotControl/LibRobotControl/library/include
-  -DMAVLINK_EXTERNAL_RX_BUFFER
 #  --xml
 #  --check-config
 

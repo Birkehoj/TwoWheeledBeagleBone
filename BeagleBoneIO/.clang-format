@@ -34,7 +34,6 @@ IndentCaseLabels: true
 # Right-align pointers and references
 PointerAlignment: Right
 
-# TODO(jmadill): Decide if we want this on. Doesn't have an "all or none" mode.
 AllowShortCaseLabelsOnASingleLine: false
 
 # Useful for spacing out functions in classes
@@ -56,6 +55,17 @@ IndentPPDirectives: AfterHash
 
 AlignEscapedNewlines: false
 
+IncludeCategories:
+  - Regex:           '^"(llvm|llvm-c|clang|clang-c)/'
+    Priority:        1
+  - Regex:           '^(<|"(gtest|gmock|isl|json)/)'
+    Priority:        3
+  - Regex:           '<[[:alnum:].]+>'
+    Priority:        2
+  - Regex:           '.*'
+    Priority:        4
+
+IncludeIsMainRegex: (Test)?$
 IncludeBlocks: Regroup
 SortIncludes: true
 
@@ -79,3 +89,14 @@ SpacesBeforeTrailingComments: 2
 
 SpacesInParentheses: false
 SpaceBeforeAssignmentOperators: true
+
+AllowShortBlocksOnASingleLine: false
+
+AllowShortFunctionsOnASingleLine: Empty
+
+ForEachMacros:
+- foreach
+- Q_FOREACH
+- BOOST_FOREACH
+
+

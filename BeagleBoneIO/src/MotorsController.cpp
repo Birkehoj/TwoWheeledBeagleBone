@@ -1,9 +1,10 @@
-#include "BeagleBoneIO/MotorsController.h"
 
-#include "rc/motor.h"
+#include "BeagleBoneIO/MotorsController.h"
 
 #include <stdexcept>
 #include <utility>
+
+#include "rc/motor.h"
 
 template <typename CFunction, typename... Args>
 static inline void callErrorCodeToException(CFunction function, Args &&... args)
