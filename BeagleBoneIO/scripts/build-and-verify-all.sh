@@ -43,7 +43,7 @@ report_past_test()
 run_clang_tidy_checks()
 {
 	echo "Running clang-tidy"
-	cmake --build $clag_build_path --target run-clang-tidy -- -j${cpucount} > clang-tidy-warnings.txt
+	cmake --build $clag_build_path --target run-clang-tidy-7 -- -j${cpucount} > clang-tidy-warnings.txt
 
 	echo $clang-tidy-warnings
 
@@ -109,7 +109,7 @@ fi
 cd "$cmakelist_dir" # go to root of project
 
 build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake"
-build_in_folder  $clang_id "-DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang"
+build_in_folder  $clang_id "-DCMAKE_CXX_COMPILER=clang++-7 -DCMAKE_C_COMPILER=clang-7"
 build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-8 -DCMAKE_C_COMPILER=gcc-8 -G Ninja"
 
 arm_build_path=$build_prepend_path/$build_configuration/$arm_id
@@ -125,8 +125,8 @@ run_cppcheck $arm_build_path
 run_cpplint $arm_build_path
 
 echo "Fixing formatting in BeagleboneIO"
-find $cmakelist_dir/src -regex '.*\.\(cpp\|h\|hpp\|cc\)' -exec clang-format -style=file -i {} \;
-find $cmakelist_dir/include -regex '.*\.\(cpp\|h\|hpp\|cc\)' -exec clang-format -style=file -i {} \;
+find $cmakelist_dir/src -regex '.*\.\(cpp\|h\|hpp\|cc\)' -exec clang-format-7 -style=file -i {} \;
+find $cmakelist_dir/include -regex '.*\.\(cpp\|h\|hpp\|cc\)' -exec clang-format-7 -style=file -i {} \;
 echo "BeagleboneIO formatted according to project rules"
 
 

@@ -78,6 +78,24 @@ set(compilerOptimizations
   -O3
   )
 
+set(linkerOptimizations
+  -O3
+  )
+
+if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
+  list(APPEND compilerOptimizations
+    -ftree-loop-vectorize
+    )
+elseif(CMAKE_CXX_COMPILER_ID MATCHES GNU)
+  list(APPEND compilerOptimizations
+    -loop-vectorize
+    -fwhole-program-vtables
+    )
+  list(APPEND linkerOptimizations
+    -fwhole-program-vtables
+    )
+endif()
+
 if(TARGET_BEAGLEBONE)
   set(beagleboneOptimizations
     -mhard-float
@@ -91,7 +109,6 @@ target_compile_options(${PROJECT_NAME}
   INTERFACE
     $<$<CONFIG:Debug>: "-Og" >
     $<$<CONFIG:Release>: ${compilerOptimizations}>
-    $<$<AND:$<CONFIG:Release>,$<CXX_COMPILER_ID:GNU>>:-ftree-loop-vectorize>
 
     # clang/GCC warnings
     $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
@@ -109,5 +126,5 @@ target_compile_options(${PROJECT_NAME}
 target_link_options(${PROJECT_NAME}
   INTERFACE
     $<$<CONFIG:Debug>: "-O0" >
-    $<$<CONFIG:Release>: "-O3" >
+    $<$<CONFIG:Release>: ${linkerOptimizations} >
   )

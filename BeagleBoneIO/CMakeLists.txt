@@ -73,7 +73,7 @@ unset(cppcheckPlatform)
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
   message(STATUS "Clang compiler detected, enabling clang tidy checks on builds.")
 
-  set(CMAKE_CXX_CLANG_TIDY clang-tidy
+  set(CMAKE_CXX_CLANG_TIDY clang-tidy-7
     -p ${CMAKE_BINARY_DIR}
     -header-filter='.*'
     )
