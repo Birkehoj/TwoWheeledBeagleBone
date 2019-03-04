@@ -7,8 +7,8 @@ namespace BeagleBoneIO
 {
 namespace Details
 {
-void SetTrigger(char const *filePath, char const *triggerType);
-void SetBrightness(char const *filePath, uint8_t brightness);
+void setTrigger(char const *filePath, char const *triggerType);
+void setBrightness(char const *filePath, uint8_t brightness);
 }  // namespace Details
 
 enum class LEDType : uint8_t
@@ -64,11 +64,11 @@ public:
 
 		if constexpr (ledType == LEDType::GREEN)
 		{
-			Details::SetBrightness(GREEN_TYPE BRIGHTNESS_PATH, brightness);
+			Details::setBrightness(GREEN_TYPE BRIGHTNESS_PATH, brightness);
 		}
 		else if (ledType == LEDType::RED)
 		{
-			Details::SetBrightness(RED_TYPE BRIGHTNESS_PATH, brightness);
+			Details::setBrightness(RED_TYPE BRIGHTNESS_PATH, brightness);
 		}
 		// possible other types one could support
 		// switch (type_)
@@ -95,11 +95,11 @@ private:
 	{
 		if constexpr (ledType == LEDType::GREEN)
 		{
-			Details::SetTrigger(GREEN_TYPE TRIGGER_PATH, triggerType);
+			Details::setTrigger(GREEN_TYPE TRIGGER_PATH, triggerType);
 		}
 		else if (ledType == LEDType::RED)
 		{
-			Details::SetTrigger(RED_TYPE TRIGGER_PATH, triggerType);
+			Details::setTrigger(RED_TYPE TRIGGER_PATH, triggerType);
 		}
 	}
 #undef TRIGGER_PATH

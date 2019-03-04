@@ -1,7 +1,6 @@
-#include "BeagleBoneIO/EncoderEqep.h"
-#include "BeagleBoneIO/LEDControl.h"
-#include "BeagleBoneIO/MotorsController.h"
 
+// TODO: clang-format why not system headers over own here?
+// clang-format off
 #include <atomic>
 #include <chrono>
 #include <csignal>
@@ -9,6 +8,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <thread>
+
+#include "BeagleBoneIO/EncoderEqep.h"
+#include "BeagleBoneIO/LEDControl.h"
+#include "BeagleBoneIO/MotorsController.h"
+// clang-format on
 
 namespace Ch = std::chrono;
 

@@ -6,14 +6,14 @@ namespace BeagleBoneIO
 {
 namespace Details
 {
-void SetTrigger(char const *filePath, char const *triggerType)
+void setTrigger(char const *filePath, char const *triggerType)
 {
 	std::ofstream fs(filePath);
 	fs.exceptions();
 	fs << triggerType;
 }
 
-void SetBrightness(char const *filePath, uint8_t brightness)
+void setBrightness(char const *filePath, uint8_t brightness)
 {
 	std::ofstream fs(filePath);
 	fs.exceptions();
