@@ -1,0 +1,102 @@
+Language: Cpp
+
+# Allow double brackets such as std::vector<std::vector<int>>.
+Standard: Cpp11
+
+# Keep lines under 100 columns long.
+ColumnLimit: 100
+
+# Always break before braces
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+  # Keeps extern "C" blocks unindented.
+  AfterExternBlock: false
+
+AlignAfterOpenBracket: DontAlign
+BreakBeforeTernaryOperators: true
+
+# Indent case labels.
+IndentCaseLabels: true
+
+# Right-align pointers and references
+PointerAlignment: Right
+
+AllowShortCaseLabelsOnASingleLine: false
+
+# Useful for spacing out functions in classes
+KeepEmptyLinesAtTheStartOfBlocks: true
+
+# Indent nested PP directives.
+IndentPPDirectives: AfterHash
+
+# break before comma to be open to extensions without modifying previous lines
+BreakBeforeInheritanceComma: true
+BreakConstructorInitializers: BeforeComma
+
+FixNamespaceComments: true
+
+# SplitEmptyNamespace: true
+# SortUsingDeclaration: true
+
+IndentPPDirectives: AfterHash
+
+AlignEscapedNewlines: false
+
+IncludeCategories:
+  - Regex:           '^"(llvm|llvm-c|clang|clang-c)/'
+    Priority:        1
+  - Regex:           '^(<|"(gtest|gmock|isl|json)/)'
+    Priority:        3
+  - Regex:           '<[[:alnum:].]+>'
+    Priority:        2
+  - Regex:           '.*'
+    Priority:        4
+
+IncludeIsMainRegex: (Test)?$
+IncludeBlocks: Regroup
+SortIncludes: true
+
+IndentCaseLabels: true
+
+# Indentation, change all numbers together
+UseTab: Always
+TabWidth: 4
+IndentWidth: 4
+AccessModifierOffset: -4
+
+AlwaysBreakTemplateDeclarations: true
+
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+
+MaxEmptyLinesToKeep: 1
+
+SpaceBeforeParens: ControlStatements
+
+SpacesBeforeTrailingComments: 2
+
+SpacesInParentheses: false
+SpaceBeforeAssignmentOperators: true
+
+AllowShortBlocksOnASingleLine: false
+
+AllowShortFunctionsOnASingleLine: Empty
+
+ForEachMacros:
+- foreach
+- Q_FOREACH
+- BOOST_FOREACH
+
+
