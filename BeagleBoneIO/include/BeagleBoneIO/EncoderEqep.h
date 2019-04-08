@@ -16,12 +16,12 @@ enum class EncoderPosition
 class EncoderEqep
 {
 public:
-	explicit EncoderEqep(EncoderPosition pos);
+  explicit EncoderEqep(EncoderPosition pos);
 	[[nodiscard]] uint32_t read();
 	void write(uint32_t encoderTicks);
 
 private:
-	std::fstream m_eqepPosFile;
+  std::fstream m_eqepPosFile;
 };
 }  // namespace BeagleBoneIO
 #endif  // BEAGLEBONEIO_INCLUDE_BEAGLEBONEIO_ENCODEREQEP_H_

@@ -25,14 +25,13 @@ BraceWrapping:
   # Keeps extern "C" blocks unindented.
   AfterExternBlock: false
 
-AlignAfterOpenBracket: DontAlign
 BreakBeforeTernaryOperators: true
 
-# Indent case labels.
+AlignAfterOpenBracket: DontAlign
+
 IndentCaseLabels: true
 
-# Right-align pointers and references
-PointerAlignment: Right
+PointerAlignment: Left
 
 AllowShortCaseLabelsOnASingleLine: false
 

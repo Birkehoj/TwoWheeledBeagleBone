@@ -8,5 +8,8 @@ CheckOptions:
   - { key: readability-identifier-naming.FunctionCase,        value: camelBack }
   - { key: readability-identifier-naming.VariableCase,        value: camelBack }
   - { key: readability-identifier-naming.GlobalConstantCase,  value: camelBack }
+  - { key: readability-braces-around-statements.ShortStatementLines, value: 0 }
+
+readability-braces-around-statements
 
 FormatStyle: file
