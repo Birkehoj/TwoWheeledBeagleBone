@@ -1,12 +1,13 @@
 #!/bin/bash
 
-arm_id="gcc-arm"
+arm_id="arm"
 clang_id="clang"
 gcc_id="gcc"
 
 build_prepend_path="build"
 
-cpucount=`nproc`
+#cpucount=$(expr `nproc`)
+cpucount=$((`nproc`+1))
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 cmakelist_dir=$script_dir/..
 
@@ -25,7 +26,9 @@ build_in_folder () {
 		exit 1
 	fi
 
-	cmake --build $build_path --target all -- -j${cpucount} # --clean-first
+	#cmake --build $build_path --target all -- -j${cpucount} # --clean-first
+
+	cmake --build $build_path --target TestTwoWheeledBeagleBone --clean-first -- -j${cpucount} # --clean-first
 
 	if [[ $? -ne 0 ]]; then
 		echo "Failed to compile for target; $build_target. Exiting"
@@ -43,7 +46,7 @@ report_past_test()
 run_clang_tidy_checks()
 {
 	echo "Running clang-tidy"
-	cmake --build $clag_build_path --target run-clang-tidy-7 -- -j${cpucount} > clang-tidy-warnings.txt
+	cmake --build $clang_build_path --target run-clang-tidy -- -j${cpucount} > clang-tidy-warnings.txt
 
 	echo $clang-tidy-warnings
 
@@ -96,6 +99,11 @@ run_tests()
 	fi
 }
 
+format_folder()
+{
+	find $1 \( -iname '*.cpp' -o -iname '*.h' -o -iname '*.c' -o -iname '*.hpp' \) -exec clang-format-8 -i -style=file {} \+
+}
+
 # Main
 
 # Parse input
@@ -108,26 +116,31 @@ fi
 
 cd "$cmakelist_dir" # go to root of project
 
-build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake"
-build_in_folder  $clang_id "-DCMAKE_CXX_COMPILER=clang++-7 -DCMAKE_C_COMPILER=clang-7"
-build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-8 -DCMAKE_C_COMPILER=gcc-8 -G Ninja"
+build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/clang-gcc-arm-toolchain.cmake" # linking fails in -flto: ../libBeagleBoneIO_beagleBoneIO.a: error adding symbols: Archive has no index; run ranlib to add one
+build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake" # Alternatively  clang-gcc-arm-toolchain.cmake
+#build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-8 -DCMAKE_C_COMPILER=gcc-8 -DECM_ENABLE_SANITIZERS=\'address;leak;undefined\' -G Ninja" # dont build more than needed
+build_in_folder $clang_id "-DCMAKE_CXX_COMPILER=clang++-8 -DCMAKE_C_COMPILER=clang-8 -DECM_ENABLE_SANITIZERS=\'address;leak;undefined\' -G Ninja"
 
 arm_build_path=$build_prepend_path/$build_configuration/$arm_id
-clag_build_path=$build_prepend_path/$build_configuration/$clang_id
+clang_build_path=$build_prepend_path/$build_configuration/$clang_id
 gcc_build_path=$build_prepend_path/$build_configuration/$gcc_id
 
-run_tests $gcc_build_path
+echo "Running Unit tests"
+run_tests $clang_build_path
 
+echo "Running Cppcheck"
 run_clang_tidy_checks
 
+echo "Running Cppcheck"
 run_cppcheck $arm_build_path
 
+echo "Running Cpplint"
 run_cpplint $arm_build_path
 
 echo "Fixing formatting in BeagleboneIO"
-find $cmakelist_dir/src -regex '.*\.\(cpp\|h\|hpp\|cc\)' -exec clang-format-7 -style=file -i {} \;
-find $cmakelist_dir/include -regex '.*\.\(cpp\|h\|hpp\|cc\)' -exec clang-format-7 -style=file -i {} \;
-echo "BeagleboneIO formatted according to project rules"
 
+format_folder $cmakelist_dir/src
+format_folder $cmakelist_dir/include
+echo "BeagleboneIO formatted according to project rules"
 
 exit 0

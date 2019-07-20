@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 project("TestTwoWheeledBeagleBone" LANGUAGES CXX)
 
@@ -7,7 +7,7 @@ message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 
 if(ENABLE_UNIT_TESTS)
 
-  set(_catch2_version 2.6.1)
+  set(_catch2_version 2.9.1)
   find_package(Catch2 ${_catch2_version} REQUIRED)
 
   if(TARGET Catch2::Catch2)
@@ -55,7 +55,7 @@ if(ENABLE_UNIT_TESTS)
   if(MPI_FOUND)
     set(OptionalCatchTestLauncher ${MPIEXEC_EXECUTABLE} ${MPIEXEC_NUMPROC_FLAG} ${MPIEXEC_MAX_NUMPROCS})
   else()
-      message(STATUS "Failed to find MPI on system install mpiexec to run tests in parallel.")
+      message(STATUS "Failed to find MPI on system. Install mpiexec to run tests in parallel.")
   endif()
 
   include(Catch)
@@ -68,7 +68,13 @@ if(ENABLE_UNIT_TESTS)
     run_tests
     COMMAND $<TARGET_FILE:${PROJECT_NAME}>
     )
+
+  # Address sanatizers
+  if(ECM_ENABLE_SANITIZERS)
+    find_package(ECM REQUIRED NO_MODULE)
+    list(APPEND CMAKE_MODULE_PATH ${ECM_MODULE_DIR})
+    include(ECMEnableSanitizers)
+  endif()
 endif()
 
 add_subdirectory(static_analysis)
-

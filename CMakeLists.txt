@@ -1,18 +1,15 @@
-cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
+
+project("TwoWheeledBeagleBone" LANGUAGES C CXX  VERSION 0.0.1)
 
 # Preable
-project("TwoWheeledBeagleBone" LANGUAGES C CXX  VERSION 0.0.1)
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+  message("Using ccache if using Ninja or unix make.")
+  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+endif()
+
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/" )
-
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-#set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-# Always use '-fPIC'/'-fPIE' option.
-set( CMAKE_POSITION_INDEPENDENT_CODE ON )
-
-link_libraries("-static")
 
 # Dependencies
 add_subdirectory("dependencies")

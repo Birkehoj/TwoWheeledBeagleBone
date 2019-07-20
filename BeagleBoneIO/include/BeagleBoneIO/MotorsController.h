@@ -15,7 +15,8 @@ enum class ChannelNumber
 class MotorsController
 {
 public:
-	explicit MotorsController(int pwmFrequency = 25000);
+	static constexpr int defaultPwmFrequency{25000};
+	explicit MotorsController(int pwmFrequency = defaultPwmFrequency);
 	~MotorsController();
 	MotorsController(const MotorsController &other) = delete;
 	MotorsController &operator=(const MotorsController &other) = delete;

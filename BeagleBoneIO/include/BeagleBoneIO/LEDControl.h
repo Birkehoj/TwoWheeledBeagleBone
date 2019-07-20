@@ -2,6 +2,7 @@
 #define BEAGLEBONEIO_INCLUDE_BEAGLEBONEIO_LEDCONTROL_H_
 
 #include <bits/stdint-uintn.h>  // cstdint but iwyu needs this
+#include <cstdint>
 
 namespace BeagleBoneIO
 {
@@ -48,17 +49,18 @@ public:
 		setTriggerType("heartbeat");
 	}
 
-#define LED_PATH "/sys/devices/platform/leds/leds/"
-#define GREEN_TYPE LED_PATH "green/"
-#define RED_TYPE LED_PATH "red/"
-#define BRIGHTNESS_PATH "brightness"
+#define LED_PATH "/sys/devices/platform/leds/leds/"  // NOLINT
+#define GREEN_TYPE LED_PATH "green/"				 // NOLINT
+#define RED_TYPE LED_PATH "red/"					 // NOLINT
+#define BRIGHTNESS_PATH "brightness"				 // NOLINT
 
 	inline void turnOff() noexcept
 	{
 		turnOn(0);
 	}
 
-	inline void turnOn(uint8_t brightness = 10) noexcept
+	static constexpr auto defaultBrightness{UINT8_C(10)};
+	inline void turnOn(uint8_t brightness = defaultBrightness) noexcept
 	{
 		setTriggerType("none");
 
@@ -89,7 +91,7 @@ public:
 	}
 
 private:
-#define TRIGGER_PATH "trigger"
+#define TRIGGER_PATH "trigger"  // NOLINT
 	// cppcheck-suppress functionStatic; not static to maintain invarinances
 	inline void setTriggerType(char const *triggerType) noexcept
 	{

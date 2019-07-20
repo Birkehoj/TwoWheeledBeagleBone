@@ -2,9 +2,7 @@
 
 #include <fstream>
 
-namespace BeagleBoneIO
-{
-namespace Details
+namespace BeagleBoneIO::Details
 {
 void setTrigger(char const *filePath, char const *triggerType)
 {
@@ -19,5 +17,4 @@ void setBrightness(char const *filePath, uint8_t brightness)
 	fs.exceptions();
 	fs << static_cast<int>(brightness);
 }
-}  // namespace Details
-}  // namespace BeagleBoneIO
+}  // namespace BeagleBoneIO::Details

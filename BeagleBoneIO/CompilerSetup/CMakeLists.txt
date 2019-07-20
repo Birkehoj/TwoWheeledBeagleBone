@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 project("CompilerSetup")
 
@@ -27,11 +27,9 @@ set(_clang_gcc_compiler_warnings_flag
   -Wnull-dereference # warn if a null dereference is detected
   -Wdouble-promotion # warn if float is implicit promoted to double
   -Wformat=2 # warn on security issues around functions that format output
-  -Wpadded
+#  -Wpadded # Fails with catch2
   -Wnull-dereference
-  -Wold-style-cast
   -Wshadow
-  -Wformat=2
   -Weffc++
 #  -Werror=implicit-function-declaration
   -Wno-unknown-pragmas # allows for inline compiler specific ignore warnings
@@ -76,27 +74,34 @@ set(_clang_compiler_warnings
 
 set(compilerOptimizations
   -O3
+#  -flto # Clang builds fails for beaglebone with flto
   )
 
 set(linkerOptimizations
   -O3
+#  -flto
   )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
   list(APPEND compilerOptimizations
-    -ftree-loop-vectorize
+#    -fstrict-vtable-pointers
+#    -fwhole-program-vtables
+    )
+  list(APPEND linkerOptimizations
+#    -fwhole-program-vtables
     )
 elseif(CMAKE_CXX_COMPILER_ID MATCHES GNU)
   list(APPEND compilerOptimizations
     -loop-vectorize
-    -fwhole-program-vtables
+    -flto
     )
   list(APPEND linkerOptimizations
-    -fwhole-program-vtables
+    -flto
     )
 endif()
 
 if(TARGET_BEAGLEBONE)
+  list(APPEND _clang_compiler_warnings -cxx-isystem /usr/arm-linux-gnueabihf/include/)
   set(beagleboneOptimizations
     -mhard-float
     -mfloat-abi=hard
@@ -107,7 +112,7 @@ endif()
 
 target_compile_options(${PROJECT_NAME}
   INTERFACE
-    $<$<CONFIG:Debug>: "-Og" >
+    $<$<CONFIG:Debug>: -Og -g >
     $<$<CONFIG:Release>: ${compilerOptimizations}>
 
     # clang/GCC warnings
@@ -119,12 +124,10 @@ target_compile_options(${PROJECT_NAME}
 
     # clang warnings
     $<$<CXX_COMPILER_ID:Clang>:${_clang_compiler_warnings}>
-
-    $<$<BOOL:TARGET_BEAGLEBONE>:${beagleboneOptimizations}>
   )
 
 target_link_options(${PROJECT_NAME}
   INTERFACE
-    $<$<CONFIG:Debug>: "-O0" >
+    $<$<CONFIG:Debug>: -O0 -g>
     $<$<CONFIG:Release>: ${linkerOptimizations} >
   )

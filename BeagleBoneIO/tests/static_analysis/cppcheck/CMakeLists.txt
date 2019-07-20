@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 # additional target to perform cppcheck run, requires cppcheck
 include(ProcessorCount)
@@ -21,18 +21,17 @@ add_custom_target(
   ${src_root_dir}/include
   --enable=all
   --std=c++14
-  --verbose
+#  --verbose
   --quiet
   --enable=warning
   --inconclusive
   --force
   --inline-suppr
   --language=c++
-  --verbose
   --error-exitcode=1
   -j${N}
     --platform=${cppcheckPlatform}
-  --suppress=unusedFunction
+#  --suppress=unusedFunction # We prefer -j for speed
   -I${src_root_dir}/include
   -i${src_root_dir}/ExternalDependencies/LibRobotControl/*
   -I${src_root_dir}/ExternalDependencies/LibRobotControl/LibRobotControl/library/include

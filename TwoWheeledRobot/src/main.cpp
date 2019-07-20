@@ -57,18 +57,21 @@ int main()
 	LED<LEDType::RED> redLED;
 	redLED.enablePeriodicBlick();
 	greenLED.turnOn(UINT8_MAX);
-	unsigned count = 0;
+	unsigned count = 0U;
 	bool lightInLed = false;
-	leftMotor.set(leftMotorNo, 0.2);
+	constexpr double defaultPower = 0.2;
+	leftMotor.set(leftMotorNo, defaultPower);
 	//  leftEncoder.Write(0);
 	while (continueRunning)
 	{
 		using namespace std::chrono_literals;  // NOLINT(build/namespaces)
 		Ch::time_point nextAwakeTime = Ch::steady_clock::now() + 10ms;
-		if (++count > 100)
+		constexpr unsigned countNoToToggleLed = 100U;
+		if (++count > countNoToToggleLed)
 		{
 			lightInLed = !lightInLed;
-			greenLED.turnOn(100);
+			static constexpr auto middleBrightness{UINT8_C(100)};
+			greenLED.turnOn(middleBrightness);
 			count = 0;
 			//      auto duration =
 			// Ch::duration_cast<Ch::milliseconds>(Ch::steady_clock::now() -

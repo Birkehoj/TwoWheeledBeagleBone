@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 find_program(CCACHE_PROGRAM ccache)
 if(CCACHE_PROGRAM)
@@ -7,6 +7,10 @@ if(CCACHE_PROGRAM)
 endif()
 
 project(TwoWheeledRobot LANGUAGES C CXX)
+
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/BeagleBoneIO/cmake/" )
+
+include(BeagleBoneProjectConfig)
 
 add_executable(TwoWheeledRobot_TwoWheeledRobot
   src/main.cpp

@@ -5,7 +5,7 @@
 
 function(clangformat_setup clangformat_srcs)
   if(NOT CLANGFORMAT_EXECUTABLE)
-    set(CLANGFORMAT_EXECUTABLE clang-format-7)
+    set(CLANGFORMAT_EXECUTABLE clang-format-8)
   endif()
 
   if(NOT EXISTS ${CLANGFORMAT_EXECUTABLE})

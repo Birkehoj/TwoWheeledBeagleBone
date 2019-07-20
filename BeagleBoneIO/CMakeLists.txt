@@ -1,37 +1,23 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
-find_program(CCACHE_PROGRAM ccache)
-if(CCACHE_PROGRAM)
-  message("Using ccache if using Ninja or unix make.")
-  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
-endif()
+project(BeagleBoneIO LANGUAGES C CXX)
 
 # Preable
-project(BeagleBoneIO LANGUAGES C CXX)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR}/cmake/)
-
-# Project wide setup
-option(TARGET_BEAGLEBONE OFF "Build for beaglebone target")
-message(STATUS "Targeting beaglebone: ${TARGET_BEAGLEBONE}")
-
-set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
-set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
-
-# Always use '-fPIC'/'-fPIE' option.
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-
-link_libraries("-static")
+include(BeagleBoneProjectConfig)
 
 set(LIBRARY_TARGET_NAME BeagleBoneIO_beagleBoneIO)
 
 # Dependencies
 add_subdirectory("ExternalDependencies")
 
+# Main build targets
+add_library(${LIBRARY_TARGET_NAME})
+add_library(BeagleBoneIO::BeagleBoneIO_beagleBoneIO ALIAS ${LIBRARY_TARGET_NAME})
+
 # Static analysis
 include(ProcessorCount)
 ProcessorCount(N)
-
 set(CMAKE_CXX_CPPLINT cpplint
   --quiet
   --recursive
@@ -39,6 +25,9 @@ set(CMAKE_CXX_CPPLINT cpplint
   ${CMAKE_CURRENT_LIST_DIR}/src
   ${CMAKE_CURRENT_LIST_DIR}/include
   )
+
+find_program(iwyu_path NAMES include-what-you-use iwyu)
+set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${iwyu_path};-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args;-Xiwyu;--transitive_includes_only;-Xiwyu;--verbose=3 -Wno-unknown-warning-option")
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -53,15 +42,14 @@ set(CMAKE_CXX_CPPCHECK cppcheck
   ${CMAKE_CURRENT_LIST_DIR}/include
   --enable=all
   --std=c++14
-#  --verbose
   --quiet
   --inconclusive
   --force
   --inline-suppr
   --language=c++
-  --verbose
   --error-exitcode=1
-  --suppress=unusedFunction
+#  --suppress=unusedFunction # We prefer -j for speed
+#  --verbose
 #  --check-library
   --platform=${cppcheckPlatform}
   -j${N}
@@ -74,19 +62,18 @@ unset(cppcheckPlatform)
 if(${CMAKE_CXX_COMPILER_ID} STREQUAL "Clang")
   message(STATUS "Clang compiler detected, enabling clang tidy checks on builds.")
 
-  set(CMAKE_CXX_CLANG_TIDY clang-tidy-7
+  set(CMAKE_CXX_CLANG_TIDY clang-tidy-8
     -p ${CMAKE_BINARY_DIR}
     -header-filter='.*'
     )
   set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-  find_program(iwyu_path NAMES include-what-you-use iwyu)
-  set(CMAKE_CXX_INCLUDE_WHAT_YOU_USE "${iwyu_path};-Xiwyu;any;-Xiwyu;iwyu;-Xiwyu;args;-Xiwyu;--transitive_includes_only;-Xiwyu;--verbose=3 -Wno-unknown-warning-option")
 endif()
 
-# Main build targets
-add_library(${LIBRARY_TARGET_NAME})
-add_library(BeagleBoneIO::BeagleBoneIO_beagleBoneIO ALIAS ${LIBRARY_TARGET_NAME})
+#include(SourcesFromTarget)
+#getSourcePaths(${LIBRARY_TARGET_NAME} absSourcePaths)
+include(CppCheckTarget)
+cppcheckSetup(${LIBRARY_TARGET_NAME})
+#unset(absSourcePaths)
 
 add_subdirectory(CompilerSetup)
 add_subdirectory(src)
@@ -103,6 +90,11 @@ target_sources(${LIBRARY_TARGET_NAME}
 target_compile_features(${LIBRARY_TARGET_NAME}
   PUBLIC
     cxx_std_17
+  )
+
+target_compile_options(${LIBRARY_TARGET_NAME}
+  PRIVATE
+    -Wpadded
   )
 
 include(CheckIPOSupported)
@@ -133,15 +125,9 @@ target_link_libraries(${LIBRARY_TARGET_NAME}
 add_subdirectory("tests")
 
 # Packagaging
-
+# TODO:
 
 # Various Testing and formating targets
-#include(SourcesFromTarget)
-#getSourcePaths(${LIBRARY_TARGET_NAME} absSourcePaths)
-include(CppCheckTarget)
-cppcheckSetup(${LIBRARY_TARGET_NAME})
-#unset(absSourcePaths)
-
 option(CLANGFORMAT "Setup clangformat target" ON)
 if(CLANGFORMAT)
   include(ClangFormat)
