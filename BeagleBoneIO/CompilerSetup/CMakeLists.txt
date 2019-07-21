@@ -74,22 +74,26 @@ set(_clang_compiler_warnings
 
 set(compilerOptimizations
   -O3
-#  -flto # Clang builds fails for beaglebone with flto
   )
 
 set(linkerOptimizations
   -O3
-#  -flto
   )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
-  list(APPEND compilerOptimizations
-#    -fstrict-vtable-pointers
-#    -fwhole-program-vtables
-    )
-  list(APPEND linkerOptimizations
-#    -fwhole-program-vtables
-    )
+  # Clang builds fails for beaglebone with flto which makes sense since we link with gcc cross compiler
+  # TODO Find a way to link for arm7 with lld
+  if(NOT TARGET_BEAGLEBONE)
+    list(APPEND compilerOptimizations
+      -flto
+      -fstrict-vtable-pointers
+      -fwhole-program-vtables
+      )
+    list(APPEND linkerOptimizations
+      -flto
+      -fwhole-program-vtables
+      )
+  endif()
 elseif(CMAKE_CXX_COMPILER_ID MATCHES GNU)
   list(APPEND compilerOptimizations
     -loop-vectorize
@@ -112,8 +116,9 @@ endif()
 
 target_compile_options(${PROJECT_NAME}
   INTERFACE
-    $<$<CONFIG:Debug>: -Og -g >
+    $<$<CONFIG:Debug>: -Og >
     $<$<CONFIG:Release>: ${compilerOptimizations}>
+    $<$<BOOL:TARGET_BEAGLEBONE>:${beagleboneOptimizations}>
 
     # clang/GCC warnings
     $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:
@@ -128,6 +133,6 @@ target_compile_options(${PROJECT_NAME}
 
 target_link_options(${PROJECT_NAME}
   INTERFACE
-    $<$<CONFIG:Debug>: -O0 -g>
+    $<$<CONFIG:Debug>: -Og>
     $<$<CONFIG:Release>: ${linkerOptimizations} >
   )

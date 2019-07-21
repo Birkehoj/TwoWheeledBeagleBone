@@ -114,12 +114,17 @@ else
 	exit 1
 fi
 
+echo "Fixing formatting in BeagleboneIO"
+format_folder $cmakelist_dir/src
+format_folder $cmakelist_dir/include
+echo "BeagleboneIO formatted according to project rules"
+
 cd "$cmakelist_dir" # go to root of project
 
-build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/clang-gcc-arm-toolchain.cmake" # linking fails in -flto: ../libBeagleBoneIO_beagleBoneIO.a: error adding symbols: Archive has no index; run ranlib to add one
-build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake" # Alternatively  clang-gcc-arm-toolchain.cmake
-#build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-8 -DCMAKE_C_COMPILER=gcc-8 -DECM_ENABLE_SANITIZERS=\'address;leak;undefined\' -G Ninja" # dont build more than needed
+#build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/clang-gcc-arm-toolchain.cmake -G Ninja"
+build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-9 -DCMAKE_C_COMPILER=gcc-9 -G Ninja" # dont build more than needed
 build_in_folder $clang_id "-DCMAKE_CXX_COMPILER=clang++-8 -DCMAKE_C_COMPILER=clang-8 -DECM_ENABLE_SANITIZERS=\'address;leak;undefined\' -G Ninja"
+build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -G Ninja" # Alternatively  clang-gcc-arm-toolchain.cmake
 
 arm_build_path=$build_prepend_path/$build_configuration/$arm_id
 clang_build_path=$build_prepend_path/$build_configuration/$clang_id
@@ -136,11 +141,5 @@ run_cppcheck $arm_build_path
 
 echo "Running Cpplint"
 run_cpplint $arm_build_path
-
-echo "Fixing formatting in BeagleboneIO"
-
-format_folder $cmakelist_dir/src
-format_folder $cmakelist_dir/include
-echo "BeagleboneIO formatted according to project rules"
 
 exit 0

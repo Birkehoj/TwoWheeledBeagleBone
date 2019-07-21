@@ -12,7 +12,11 @@ set(LIBRARY_TARGET_NAME BeagleBoneIO_beagleBoneIO)
 add_subdirectory("ExternalDependencies")
 
 # Main build targets
-add_library(${LIBRARY_TARGET_NAME})
+if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
+  add_library(${LIBRARY_TARGET_NAME} STATIC) # TODO Would like this to be OBJECT but clang-8 builds fails when flto is not on?
+else()
+  add_library(${LIBRARY_TARGET_NAME} OBJECT)
+endif()
 add_library(BeagleBoneIO::BeagleBoneIO_beagleBoneIO ALIAS ${LIBRARY_TARGET_NAME})
 
 # Static analysis
