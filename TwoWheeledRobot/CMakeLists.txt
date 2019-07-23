@@ -1,11 +1,5 @@
 cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
-find_program(CCACHE_PROGRAM ccache)
-if(CCACHE_PROGRAM)
-  message("Using ccache if using Ninja or unix make.")
-  set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
-endif()
-
 project(TwoWheeledRobot LANGUAGES C CXX)
 
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/BeagleBoneIO/cmake/" )
