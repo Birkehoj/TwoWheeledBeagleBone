@@ -121,8 +121,7 @@ echo "BeagleboneIO formatted according to project rules"
 
 cd "$cmakelist_dir" # go to root of project
 
-#build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/clang-gcc-arm-toolchain.cmake -G Ninja"
-build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-8 -DCMAKE_C_COMPILER=gcc-8 -G Ninja" # dont build more than needed
+build_in_folder $gcc_id "-DCMAKE_CXX_COMPILER=g++-8 -DCMAKE_C_COMPILER=gcc-8 -DECM_ENABLE_SANITIZERS=\'address;leak;undefined\' -G Ninja" # dont build more than needed
 build_in_folder $clang_id "-DCMAKE_CXX_COMPILER=clang++-8 -DCMAKE_C_COMPILER=clang-8 -DECM_ENABLE_SANITIZERS=\'address;leak;undefined\' -G Ninja"
 build_in_folder $arm_id "-DCMAKE_TOOLCHAIN_FILE=cmake/gcc-arm-toolchain.cmake -G Ninja" # Alternatively  clang-gcc-arm-toolchain.cmake
 
@@ -130,8 +129,8 @@ arm_build_path=$build_prepend_path/$build_configuration/$arm_id
 clang_build_path=$build_prepend_path/$build_configuration/$clang_id
 gcc_build_path=$build_prepend_path/$build_configuration/$gcc_id
 
-echo "Running Unit tests"
-run_tests $clang_build_path
+echo "Running Unit tests locally"
+run_tests $gcc_build_path
 
 echo "Running Cppcheck"
 run_clang_tidy_checks

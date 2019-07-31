@@ -2,10 +2,10 @@ cmake_minimum_required(VERSION 3.15 FATAL_ERROR)
 
 project("TestTwoWheeledBeagleBone" LANGUAGES CXX)
 
-option(ENABLE_UNIT_TESTS "Enable unit tests." ON)
-message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
+#option(ENABLE_UNIT_TESTS "Enable unit tests." ON)
+#message(STATUS "Enable testing: ${ENABLE_UNIT_TESTS}")
 
-if(ENABLE_UNIT_TESTS)
+if(BUILD_TESTING)
 
   set(_catch2_version 2.9.1)
   find_package(Catch2 ${_catch2_version} REQUIRED)

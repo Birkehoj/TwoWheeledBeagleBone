@@ -126,6 +126,7 @@ target_link_libraries(${LIBRARY_TARGET_NAME}
   )
 
 # Tests
+include(CTest)
 add_subdirectory("tests")
 
 # Packagaging

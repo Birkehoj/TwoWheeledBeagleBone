@@ -1,5 +1,0 @@
-add_test( [==[Sum of integers for a short vector]==] /home/anders/workspace/BeagleBone/TwoWheeledBeagleBone/tests/TestTwoWheeledBeagleBone [==[Sum of integers for a short vector]==])
-set_tests_properties( [==[Sum of integers for a short vector]==] PROPERTIES WORKING_DIRECTORY /home/anders/workspace/BeagleBone/TwoWheeledBeagleBone/tests)
-add_test( [==[Sum of integers for a longer vector]==] /home/anders/workspace/BeagleBone/TwoWheeledBeagleBone/tests/TestTwoWheeledBeagleBone [==[Sum of integers for a longer vector]==])
-set_tests_properties( [==[Sum of integers for a longer vector]==] PROPERTIES WORKING_DIRECTORY /home/anders/workspace/BeagleBone/TwoWheeledBeagleBone/tests)
-set( TestTwoWheeledBeagleBone_TESTS [==[Sum of integers for a short vector]==] [==[Sum of integers for a longer vector]==])
