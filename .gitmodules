@@ -1,0 +1,3 @@
+[submodule "BeagleBoneIO"]
+	path = BeagleBoneIO
+	url = git@github.com:Birkehoj/BeagleBoneIO.git

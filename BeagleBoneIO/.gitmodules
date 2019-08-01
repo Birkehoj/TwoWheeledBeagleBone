@@ -1,3 +1,0 @@
-[submodule "LibRobotControl"]
-	path = ExternalDependencies/LibRobotControl/LibRobotControl
-	url = git@github.com:Birkehoj/librobotcontrol.git
